@@ -1,4 +1,5 @@
-﻿using Dal.Base.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using Dal.Base.Entity;
 
 namespace Dal.Operation.Entity;
 

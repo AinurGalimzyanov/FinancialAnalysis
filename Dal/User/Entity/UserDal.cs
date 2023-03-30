@@ -7,9 +7,6 @@ namespace Dal.User.Entity;
 
 public class UserDal : IdentityUser
 {
-    [MaxLength(255)]
-    public string? Name { get; set; }
-    
     public int? Balance { get; set; }
 
     public List<CategoriesDal>? CategoriesList { get; set; } 

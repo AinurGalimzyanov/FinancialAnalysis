@@ -9,23 +9,39 @@ public class BaseRepository<T, TI> : IBaseRepository<T, TI> where T : BaseDal<TI
     private readonly DataContext _context;
     private readonly DbSet<T> _dbSet;
     
-    public Task<TI> InsertAsync(T dal)
+    public BaseRepository(DataContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+        _dbSet = context.Set<T>();
+    }
+    
+    public async Task<TI> InsertAsync(T dal)
+    {
+        var entity = await _dbSet.AddAsync(dal);
+        await _context.SaveChangesAsync();
+        return entity.Entity.Id;
     }
 
-    public void DeleteAsync(TI id)
+    public async void DeleteAsync(TI id)
     {
-        throw new NotImplementedException();
+        var entity = await _dbSet.FindAsync(id);
+        if (entity != null)
+        {
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public Task<T?> GetAsync(TI id)
+    public async Task<T?> GetAsync(TI id)
     {
-        throw new NotImplementedException();
+        var entity = await _dbSet.FindAsync(id);
+        return entity;
     }
 
-    public Task<TI> UpdateAsync(T dal)
+    public async Task<TI> UpdateAsync(T dal)
     {
-        throw new NotImplementedException();
+        _context.Entry(dal).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return dal.Id;
     }
 }
