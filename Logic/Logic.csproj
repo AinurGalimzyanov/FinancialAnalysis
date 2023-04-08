@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+      <PackageReference Include="Microsoft.AspNetCore.Server.IIS" Version="2.2.6" />
+      <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.2.1" />
       <PackageReference Include="Serilog.AspNetCore" Version="6.1.1-dev-00295" />
       <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0-dev-00792" />
       <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
@@ -17,6 +19,10 @@
       <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dal\Dal.csproj" />
     </ItemGroup>
 
 </Project>

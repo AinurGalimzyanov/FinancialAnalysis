@@ -8,6 +8,9 @@ namespace Dal.User.Entity;
 public class UserDal : IdentityUser
 {
     public int? Balance { get; set; }
+    
+    [MaxLength(255)]
+    public string Name { get; set; }
 
     public List<CategoriesDal>? CategoriesList { get; set; } 
     

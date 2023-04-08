@@ -1,6 +1,27 @@
-﻿namespace Dal.Email.Repositories;
+﻿using Dal.Email.Entity;
+using Dal.Email.Repositories.Interface;
 
-public class EmailRepository
+namespace Dal.Email.Repositories;
+
+public class EmailRepository : IEmailRepository
 {
-    
+    public Task<Guid> InsertAsync(EmailDal dal)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<EmailDal?> GetAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Guid> UpdateAsync(EmailDal dal)
+    {
+        throw new NotImplementedException();
+    }
 }

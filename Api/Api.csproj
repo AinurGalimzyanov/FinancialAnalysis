@@ -15,6 +15,8 @@
       <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
       <PackageReference Include="IdentityServer4.Storage" Version="4.1.2" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+      <PackageReference Include="Microsoft.AspNetCore.Server.IIS" Version="2.2.6" />
+      <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.2.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.2.23128.3" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.2" />
       <PackageReference Include="Serilog.AspNetCore" Version="6.1.1-dev-00295" />
@@ -25,6 +27,14 @@
       <PackageReference Include="Serilog.Settings.Configuration" Version="4.0.0-dev-00486" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers\Test" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Dal\Dal.csproj" />
     </ItemGroup>
 
 </Project>
