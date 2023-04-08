@@ -65,8 +65,8 @@ public class AuthorizeController : BasePublicController
             issuer: _options.Issuer,
             audience: _options.Audience,
             claims: claims,
-            notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(timeMin),
+            notBefore: DateTime.Now,
+            expires: DateTime.Now.AddMinutes(timeMin),
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );
 
@@ -106,15 +106,18 @@ public class AuthorizeController : BasePublicController
     {
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
+        if (jwt.ValidTo < DateTime.UtcNow) return BadRequest("Access not vaiid");
         var email = jwt.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         if (email == null) return BadRequest();
         var user = await _userManager.FindByEmailAsync(email);
 
-        if (user != null && jwt.ValidTo <= DateTime.Now) // нужно ли если jwt устарел обновить его сразу?
+        if (user != null) 
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var accessToken = GetToken(claims, 15);
             var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
+            var jwtRefresh = handler.ReadJwtToken(refreshToken);
+            if (jwtRefresh.ValidTo < DateTime.UtcNow) return BadRequest("RefreshToken not valid");
             return Ok(new SingInModelResponse(accessToken, refreshToken, user.Name, user.Email, user.Balance));
         }
         
@@ -129,24 +132,22 @@ public class AuthorizeController : BasePublicController
     }
 
     [HttpPost("refreshAccessToken")]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshModelRequest model)
+    public async Task<IActionResult> RefreshToken()
     {
-        if (model is null)
-            return BadRequest("Invalid client request");
-        
-        string accessToken = model.AccessToken;
-        string refreshToken = model.RefreshToken;
-        
+        var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
         var handler = new JwtSecurityTokenHandler();
-        var jwtAccess = handler.ReadJwtToken(accessToken);
         var jwtRefresh = handler.ReadJwtToken(refreshToken);
-        var email = jwtAccess.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
+        if (jwtRefresh.ValidTo < DateTime.UtcNow) return BadRequest("RefreshToken not valid");
+        var email = jwtRefresh.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         if (email == null) return BadRequest();
         var user = await _userManager.FindByEmailAsync(email);
         
-        if(user != null && jwtRefresh.ValidTo <= DateTime.Now)
+        if(user != null)
         {
-            return Ok();
+            var claims = await _userManager.GetClaimsAsync(user);
+            var newAccessToken = GetToken(claims, 15);
+            var newRefreshToken = GetToken(claims, 43200);
+            return Ok(new RefreshModelResponse(newAccessToken, newRefreshToken));
         }
 
         return BadRequest();
