@@ -30,10 +30,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\Test" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Dal\Dal.csproj" />
     </ItemGroup>
 

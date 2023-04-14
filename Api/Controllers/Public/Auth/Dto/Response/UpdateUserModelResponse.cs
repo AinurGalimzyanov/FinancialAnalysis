@@ -3,13 +3,13 @@ using Newtonsoft.Json;
 
 namespace Api.Controllers.Public.Auth.Dto.Response;
 
-public class RefreshModelResponse
+public class UpdateUserModelResponse
 {
     [Required] 
     [JsonProperty("AccessToken")] 
     public string AccessToken { get; init; }
 
-    public RefreshModelResponse(string accessToken)
+    public UpdateUserModelResponse(string accessToken)
     {
         AccessToken = accessToken;
     }

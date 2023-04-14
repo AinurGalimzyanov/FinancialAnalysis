@@ -9,9 +9,6 @@ public class SingInModelResponse
     [JsonProperty("AccessToken")] 
     public string AccessToken { get; init; }
     
-    [Required] 
-    [JsonProperty("RefreshToken")] 
-    public string RefreshToken { get; init; }
     
     [Required] 
     [JsonProperty("Name")] 
@@ -26,10 +23,9 @@ public class SingInModelResponse
     [JsonProperty("Balance")]
     public int? Balance { get; init; }
 
-    public SingInModelResponse(string accessToken, string refreshToken, string name, string email, int? balance)
+    public SingInModelResponse(string accessToken, string name, string email, int? balance)
     {
         AccessToken = accessToken;
-        RefreshToken = refreshToken;
         Name = name;
         Email = email;
         Balance = balance;

@@ -1,11 +1,19 @@
 ﻿using Dal.Categories.Entity;
 using Dal.Categories.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Categories.Repositories;
 
 public class CategoriesRepository : ICategoriesRepository
 {
-    public Task<Guid> InsertAsync(CategoriesDal dal)
+    private readonly DataContext _context;
+
+    public CategoriesRepository(DataContext context)
+    {
+        _context = context;
+    }
+    
+    public  Task<Guid> InsertAsync(CategoriesDal dal)
     {
         throw new NotImplementedException();
     }
