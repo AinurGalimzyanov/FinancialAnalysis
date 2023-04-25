@@ -1,6 +1,8 @@
 using System.Text;
 using Api;
+using Api.Controllers.Operation.Mapping;
 using Api.Controllers.Public.Auth.Mapping;
+using Api.Controllers.Public.Categories.Mapping;
 using AutoMapper;
 using Dal;
 using Dal.Categories.Repositories;
@@ -11,6 +13,10 @@ using Dal.Operation.Repositories;
 using Dal.Operation.Repositories.Interface;
 using Dal.User.Entity;
 using Dal.User.Repositories;
+using Logic.Managers.Categories;
+using Logic.Managers.Categories.Interface;
+using Logic.Managers.Operation;
+using Logic.Managers.Operation.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +71,7 @@ builder.Services.AddIdentityServer()
     
 builder.Services.AddControllers();
 
+
 // Тестовые репозиторий для бд почты. Требует удаления
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 // Репозиторий пользователя
@@ -73,12 +80,25 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserManager<UserDal>>();
 // ???
 //builder.Services.AddScoped(typeof(Logic.Managers.UserManager<>));
-// Мэненджер ролей из идентити
+// Мененджер ролей из идентити
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
-builder.Services.AddScoped<IOperationRepository, OperationRepository>();
+
+//репозитории и менеджер Категрий
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<ICategoriesManager, CategoriesManager>();
+//репозитории и менеджер Операций
+builder.Services.AddScoped<IOperationRepository, OperationRepository>();
+builder.Services.AddScoped<IOperationManager, OperationManager>();
+
 // Маппинг 
 builder.Services.AddAutoMapper(typeof(AccountMappingProfile));
+builder.Services.AddAutoMapper(typeof(CreateCategoriesProfile));
+builder.Services.AddAutoMapper(typeof(GetCategoryRequestProfile));
+builder.Services.AddAutoMapper(typeof(UpdateCategoryProfile));
+builder.Services.AddAutoMapper(typeof(CreateOperationProfile));
+builder.Services.AddAutoMapper(typeof(UpdateOperationProfile));
+
+
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

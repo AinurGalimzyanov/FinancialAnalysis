@@ -16,6 +16,7 @@
           "IdentityServer4.AccessTokenValidation": "3.0.1",
           "IdentityServer4.AspNetIdentity": "4.1.2",
           "IdentityServer4.Storage": "4.1.2",
+          "Logic": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "7.0.4",
           "Microsoft.AspNetCore.Server.IIS": "2.2.6",
           "Microsoft.AspNetCore.Server.IISIntegration": "2.2.1",
@@ -1339,6 +1340,26 @@
         "runtime": {
           "Dal.dll": {}
         }
+      },
+      "Logic/1.0.0": {
+        "dependencies": {
+          "Dal": "1.0.0",
+          "Microsoft.AspNetCore.OpenApi": "7.0.4",
+          "Microsoft.AspNetCore.Server.IIS": "2.2.6",
+          "Microsoft.AspNetCore.Server.IISIntegration": "2.2.1",
+          "Serilog.AspNetCore": "6.1.1-dev-00295",
+          "Serilog.Enrichers.Environment": "2.3.0-dev-00792",
+          "Serilog.Enrichers.Process": "2.0.2",
+          "Serilog.Enrichers.Thread": "3.2.0-dev-00752",
+          "Serilog.Extensions.Logging": "3.1.1-dev-10338",
+          "Serilog.Settings.Configuration": "4.0.0-dev-00486",
+          "Serilog.Sinks.Async": "1.5.0",
+          "Serilog.Sinks.File": "5.0.1-dev-00947",
+          "Swashbuckle.AspNetCore": "6.5.0"
+        },
+        "runtime": {
+          "Logic.dll": {}
+        }
       }
     }
   },
@@ -2385,6 +2406,11 @@
       "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
     },
     "Dal/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Logic/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -12,8 +12,8 @@ public class DataContext : IdentityDbContext<UserDal>
 {
     public DbSet<EmailDal> Email { get; set; }
     public DbSet<OperationDal> Operation { get; set; }
-    public DbSet<CategoriesDal> Categories { get; set; }
-    
+    public DbSet<CategoriesDal> Categories { get; set; }    
+
     public async Task<int> SaveChangesAsync()
     {
         return await base.SaveChangesAsync();
@@ -21,6 +21,20 @@ public class DataContext : IdentityDbContext<UserDal>
     
     public DataContext(DbContextOptions<DataContext> options)
         : base(options) { }
+    
+    
+    
+    /*using (var db = new DataContext())
+    {
+        var company1 = new CategoriesDal() { Name = "Работа" };
+        var company2 = new CategoriesDal() { Name = "Аптека" };
+        var company3 = new CategoriesDal() { Name = "Продукты" };
+        var company4 = new CategoriesDal() { Name = "Подарки" };
+        var company5 = new CategoriesDal() { Name = "Развлечение" };
+ 
+        db.Companies.AddRange(company1, company2, company3, company4, company5); 
+        db.SaveChanges();
+    }*/
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

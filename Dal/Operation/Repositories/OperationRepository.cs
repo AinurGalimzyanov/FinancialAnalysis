@@ -1,28 +1,29 @@
-﻿using Dal.Operation.Entity;
+﻿using Dal.Base.Repositories;
+using Dal.Operation.Entity;
 using Dal.Operation.Repositories.Interface;
+using Dal.User.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Operation.Repositories;
 
-public class OperationRepository : IOperationRepository
+public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperationRepository
 {
-    public Task<Guid> InsertAsync(OperationDal dal)
+    private readonly DataContext _context;
+    public OperationRepository(DataContext context) : base(context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
-
-    public void DeleteAsync(Guid id)
+    
+    public  List<OperationDal> GetAllUserCategoryOperation(string userId, Guid categoryId)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<OperationDal?> GetAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Guid> UpdateAsync(OperationDal dal)
-    {
-        throw new NotImplementedException();
+        var var2 = _context.Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
+            .ToList();
+       
+        
+        return _context.Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
+            .ToList();
     }
 }
 

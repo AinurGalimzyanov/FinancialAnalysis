@@ -50,6 +50,8 @@ public class AuthorizeController : BasePublicController
             await _userManager.AddClaimsAsync(user, claims);
             var accessToken = GetToken(claims, 15);
             var refreshToken = GetToken(claims, 43200);
+            user.RefreshToken = refreshToken;
+            await _userManager.UpdateAsync(user);
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
             return Ok(new RegistModelResponse("Bearer " + accessToken, user.Name, user.Email));
         }
@@ -88,16 +90,14 @@ public class AuthorizeController : BasePublicController
             var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
             if (refreshToken == null)
             { 
-                refreshToken = GetToken(claims, 43200);
-                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
+                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", user.RefreshToken);
             }
-            return Ok(new SingInModelResponse("Bearer " +accessToken, user.Name, user.Email, user.Balance));
+            return Ok(new SingInModelResponse("Bearer " + accessToken, user.Name, user.Email, user.Balance));
         }
 
         return Unauthorized();
     }
 
-    /*
     private string СonvertStringInJwtAndReturnEmail(string token)
     {
         var handler = new JwtSecurityTokenHandler();
@@ -105,7 +105,6 @@ public class AuthorizeController : BasePublicController
         var email = jwt.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         return email;
     }
-    */
     
     [HttpPost("signinWithAccess")]
     public async Task<IActionResult> SignInWithAccess([FromHeader] string Authorization)
@@ -124,11 +123,8 @@ public class AuthorizeController : BasePublicController
             var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
             if (refreshToken == null)
             { 
-                refreshToken = GetToken(claims, 43200);
-                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
+                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", user.RefreshToken);
             }
-            var jwtRefresh = handler.ReadJwtToken(refreshToken);
-            if (jwtRefresh.ValidTo < DateTime.UtcNow) return BadRequest("RefreshToken not valid");
             return Ok(new SingInModelResponse("Bearer " +accessToken, user.Name, user.Email, user.Balance));
         }
         
@@ -148,16 +144,19 @@ public class AuthorizeController : BasePublicController
         var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
         var handler = new JwtSecurityTokenHandler();
         var jwtRefresh = handler.ReadJwtToken(refreshToken);
+        if (jwtRefresh.ValidTo < DateTime.UtcNow) return BadRequest("Refresh not vaiid");
         var email = jwtRefresh.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         if (email == null) return BadRequest();
         var user = await _userManager.FindByEmailAsync(email);
         
-        if(user != null || jwtRefresh.ValidTo < DateTime.UtcNow)
+        if(user != null || user.RefreshToken == refreshToken)
         {
             
             var claims = await _userManager.GetClaimsAsync(user);
             var newAccessToken = GetToken(claims, 15);
             var newRefreshToken = GetToken(claims, 43200);
+            user.RefreshToken = newRefreshToken;
+            await _userManager.UpdateAsync(user);
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
             return Ok(new RefreshModelResponse("Bearer " + newAccessToken));
         }
@@ -168,11 +167,11 @@ public class AuthorizeController : BasePublicController
 
 
     [HttpPost("updateUser")]
-    public async Task<IActionResult> UpdateUser([FromHeader] string token, [FromBody] UpdateUserModelRequest model)
+    public async Task<IActionResult> UpdateUser([FromHeader] string Authorization, [FromBody] UpdateUserModelRequest model)
     {
         if (model == null) return BadRequest();
         var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
+        var jwt = handler.ReadJwtToken(Authorization);
         if (jwt.ValidTo < DateTime.UtcNow) return BadRequest("Access not vaiid");
         var email = jwt.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         if (email == null) return BadRequest();
@@ -197,6 +196,8 @@ public class AuthorizeController : BasePublicController
                 var newAccessToken = GetToken(newClaims, 15);
                 var newRefreshToken = GetToken(newClaims, 43200);
                 HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
+                user.RefreshToken = newRefreshToken;
+                await _userManager.UpdateAsync(user);
                 
                 return Ok(new UpdateUserModelResponse("Bearer " + newAccessToken));
             }

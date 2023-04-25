@@ -2540,6 +2540,34 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "Logic/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Dal": "1.0.0",
+          "Microsoft.AspNetCore.OpenApi": "7.0.4",
+          "Microsoft.AspNetCore.Server.IIS": "2.2.6",
+          "Microsoft.AspNetCore.Server.IISIntegration": "2.2.1",
+          "Serilog.AspNetCore": "6.1.1-dev-00295",
+          "Serilog.Enrichers.Environment": "2.3.0-dev-00792",
+          "Serilog.Enrichers.Process": "2.0.2",
+          "Serilog.Enrichers.Thread": "3.2.0-dev-00752",
+          "Serilog.Extensions.Logging": "3.1.1-dev-10338",
+          "Serilog.Settings.Configuration": "4.0.0-dev-00486",
+          "Serilog.Sinks.Async": "1.5.0",
+          "Serilog.Sinks.File": "5.0.1-dev-00947",
+          "Swashbuckle.AspNetCore": "6.5.0"
+        },
+        "compile": {
+          "bin/placeholder/Logic.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Logic.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -7036,6 +7064,11 @@
       "type": "project",
       "path": "../Dal/Dal.csproj",
       "msbuildProject": "../Dal/Dal.csproj"
+    },
+    "Logic/1.0.0": {
+      "type": "project",
+      "path": "../Logic/Logic.csproj",
+      "msbuildProject": "../Logic/Logic.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -7048,6 +7081,7 @@
       "IdentityServer4.AccessTokenValidation >= 3.0.1",
       "IdentityServer4.AspNetIdentity >= 4.1.2",
       "IdentityServer4.Storage >= 4.1.2",
+      "Logic >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.4",
       "Microsoft.AspNetCore.Server.IIS >= 2.2.6",
       "Microsoft.AspNetCore.Server.IISIntegration >= 2.2.1",
@@ -7090,6 +7124,9 @@
           "projectReferences": {
             "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj": {
               "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj"
+            },
+            "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj": {
+              "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj"
             }
           }
         }

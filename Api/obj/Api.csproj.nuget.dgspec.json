@@ -28,6 +28,9 @@
             "projectReferences": {
               "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj": {
                 "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj"
+              },
+              "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj": {
+                "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj"
               }
             }
           }
@@ -241,6 +244,116 @@
             "Serilog.AspNetCore": {
               "target": "Package",
               "version": "[6.1.1-dev-00295, )"
+            },
+            "Serilog.Enrichers.Process": {
+              "target": "Package",
+              "version": "[2.0.2, )"
+            },
+            "Serilog.Enrichers.Thread": {
+              "target": "Package",
+              "version": "[3.2.0-dev-00752, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[3.1.1-dev-10338, )"
+            },
+            "Serilog.Settings.Configuration": {
+              "target": "Package",
+              "version": "[4.0.0-dev-00486, )"
+            },
+            "Serilog.Sinks.Async": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.1-dev-00947, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj",
+        "projectName": "Logic",
+        "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\Logic.csproj",
+        "packagesPath": "C:\\Users\\79373\\.nuget\\packages\\",
+        "outputPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Logic\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\79373\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj": {
+                "projectPath": "E:\\JetBrains Rider 2022.2.2\\FinancialAnalysis\\Dal\\Dal.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.AspNetCore.Server.IIS": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "Microsoft.AspNetCore.Server.IISIntegration": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.1.1-dev-00295, )"
+            },
+            "Serilog.Enrichers.Environment": {
+              "target": "Package",
+              "version": "[2.3.0-dev-00792, )"
             },
             "Serilog.Enrichers.Process": {
               "target": "Package",

@@ -1,13 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Dal.Base.Entity;
+using Dal.Categories.Entity;
+using Dal.User.Entity;
 
 namespace Dal.Operation.Entity;
 
 public class OperationDal : BaseDal<Guid>
 {
-    public string? Type;
+    public int? Price { get; set; }
+    
+    public DateTime? DateTime { get; set; }
 
-    public int? Price;
-
-    public DateTime DateTime;
+    public CategoriesDal? CategoriesDal { get; set; }
+    
+    public UserDal? UserDal { get; set; }
+    
+    public string? Type { get; set; }
 }

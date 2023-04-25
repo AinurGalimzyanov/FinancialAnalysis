@@ -19,7 +19,7 @@ public class BaseManager<T, TI> : IBaseManager<T, TI> where T : BaseDal<TI>
     }
 
     public void DeleteAsync(TI id)
-    {
+    { 
         Repository.DeleteAsync(id);
     }
 
