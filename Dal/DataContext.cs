@@ -18,23 +18,13 @@ public class DataContext : IdentityDbContext<UserDal>
     {
         return await base.SaveChangesAsync();
     }
-    
+
     public DataContext(DbContextOptions<DataContext> options)
-        : base(options) { }
-    
-    
-    
-    /*using (var db = new DataContext())
+        : base(options)
     {
-        var company1 = new CategoriesDal() { Name = "Работа" };
-        var company2 = new CategoriesDal() { Name = "Аптека" };
-        var company3 = new CategoriesDal() { Name = "Продукты" };
-        var company4 = new CategoriesDal() { Name = "Подарки" };
-        var company5 = new CategoriesDal() { Name = "Развлечение" };
- 
-        db.Companies.AddRange(company1, company2, company3, company4, company5); 
-        db.SaveChanges();
-    }*/
+        Database.EnsureCreated();
+    }
+    
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

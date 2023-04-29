@@ -14,9 +14,9 @@ public class GetCategoryModelResponse
     [JsonProperty("Id")] 
     public Guid Id { get; init; }
 
-    public GetCategoryModelResponse(string name, Guid id)
+    public GetCategoryModelResponse(string name, Guid Id)
     {
         this.name = name;
-        this.Id = id;
+        this.Id = Id;
     }
 }

@@ -1,4 +1,8 @@
-﻿using Api.Controllers.Public.Base;
+﻿
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Claims;
+using Api.Controllers.Public.Base;
 using Api.Controllers.Public.Categories.Dto.Request;
 using Api.Controllers.Public.Categories.Dto.Response;
 using AutoMapper;
@@ -18,19 +22,23 @@ public class CategoriesController : BasePublicController
 {
     private readonly IMapper _mapper;
     private readonly ICategoriesManager _categoriesManager; 
+    private readonly UserManager<UserDal> _userManager;
 
-    public CategoriesController(ICategoriesManager categoriesManager, IMapper mapper)
+    public CategoriesController(ICategoriesManager categoriesManager, IMapper mapper, UserManager<UserDal> userManager)
     {
         _mapper = mapper;
         _categoriesManager = categoriesManager;
+        _userManager = userManager;
     }
 
     [HttpPost("create")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> CreateCategory([FromHeader] string userId, [FromBody] CreateCategoriesModelRequest model)
+    public async Task<IActionResult> CreateCategory([FromBody] CreateCategoriesModelRequest model)
     {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
         var newCategory = _mapper.Map<CategoriesDal>(model);
-        await _categoriesManager.CreateCategories(userId, newCategory);
+        await _categoriesManager.CreateCategories(token, newCategory);
         return Ok(newCategory.Id);
     }
     
@@ -53,9 +61,11 @@ public class CategoriesController : BasePublicController
 
     [HttpGet("allCategories")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetAllCategories([FromHeader] string userId)
+    public async Task<IActionResult> GetAllCategories()
     {
-        var listCategoriesDals = await _categoriesManager.GetAll(userId);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var listCategoriesDals = await _categoriesManager.GetAll(token);
         var result = listCategoriesDals
             .Select(x => _mapper.Map<GetCategoryModelResponse>(x))
             .ToList();
@@ -64,9 +74,11 @@ public class CategoriesController : BasePublicController
     
     [HttpGet("expenseCategory/{name}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetExpenseCategory([FromHeader] string userId, [FromRoute] string name)
+    public async Task<IActionResult> GetExpenseCategory([FromRoute] string name)
     {
-        var result = await _categoriesManager.GetExpenseAsync(userId, name);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var result = await _categoriesManager.GetExpenseAsync(token, name);
         return result != null ? Ok(result) : BadRequest();
     }
     

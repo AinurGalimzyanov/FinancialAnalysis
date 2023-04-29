@@ -1,8 +1,6 @@
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Dal.deps.json
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Dal.runtimeconfig.json
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Dal.exe
-E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\appsettings.Development.json
-E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\appsettings.json
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Logic.exe
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Logic.deps.json
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\Logic.runtimeconfig.json

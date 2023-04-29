@@ -23,10 +23,12 @@ public class OperationController : BasePublicController
     
     [HttpPost("create")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> CreateOperation([FromHeader] string userId, [FromBody] CreateOperationModelRequest model)
+    public async Task<IActionResult> CreateOperation([FromBody] CreateOperationModelRequest model)
     {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
         var newOperation = _mapper.Map<OperationDal>(model);
-        await _operationManager.CreateOperation(userId, newOperation, model.CategoryId);
+        await _operationManager.CreateOperation(token, newOperation, model.CategoryId);
         return Ok(newOperation.Id);
     }
     
@@ -48,33 +50,52 @@ public class OperationController : BasePublicController
             Ok(new GetOperationModelResponse(operation.Id, operation.Price, operation.DateTime)) : BadRequest();
     }
     
+    [HttpGet("getOperationByTypeCategory")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetOperationByTypeCategory([FromBody] GetOperationByTypeModelRequest model)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
+        var result = operations
+            .Select(x => _mapper.Map<GetOperationModelResponse>(x))
+            .ToList();
+        return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
+    }
+    
     [HttpGet("getOperationByType")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetOperationByType([FromHeader] string userId, [FromBody] GetOperationByTypeModelRequest model)
+    public async Task<IActionResult> GetOperationByType([FromBody] GetOperationByTypeModelRequest model)
     {
-        var operations = await _operationManager.GetOperationByType(userId, model.CategoryId, model.Type);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
         var result = operations
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();
         return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
     }
     
-    [HttpGet("getAllOperation/{categoryId}")]
+    [HttpGet("getAllOperationCategory/{categoryId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetAllOperation([FromHeader] string userId, [FromRoute] Guid categoryId)
+    public async Task<IActionResult> GetAllOperationCategory([FromRoute] Guid categoryId)
     {
-        var operations = await _operationManager.GetAllOperation(userId, categoryId);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var operations = await _operationManager.GetAllOperation(token, categoryId);
         var result = operations
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();
         return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
     }
     
-    [HttpGet("getSumByType")]
+    [HttpGet("getSumByTypeCategory")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetSumByType([FromHeader] string userId, [FromBody] GetOperationByTypeModelRequest model)
+    public async Task<IActionResult> GetSumByTypeCategory([FromBody] GetOperationByTypeModelRequest model)
     {
-        var operations = await _operationManager.GetOperationByType(userId, model.CategoryId, model.Type);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        
+        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
         var result = operations
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();

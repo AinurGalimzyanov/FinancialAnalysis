@@ -17,9 +17,6 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
 
     public  List<CategoriesDal> GetAllUserCategory(string userId)
     {
-        /*var user = _context.Set<UserDal>()
-            .Include(x => x.CategoriesList)
-            .FirstOrDefault(x => x.Id == userId);*/
         return _context.Set<CategoriesDal>().Where(x => x.UserDal.Id == userId).ToList();
     }
 }

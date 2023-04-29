@@ -6,9 +6,9 @@ namespace Logic.Managers.Operation.Interface;
 
 public interface IOperationManager : IBaseManager<OperationDal, Guid>
 {
-    public Task CreateOperation(string userId, OperationDal dal, Guid categoryId);
-    public Task<List<OperationDal>> GetAllOperation(string userId, Guid categoryId);
-    public Task<List<OperationDal>> GetOperationByType(string userId, Guid categoryId, string typeOperation);
+    public Task CreateOperation(string token, OperationDal dal, Guid categoryId);
+    public Task<List<OperationDal>> GetAllOperation(string token, Guid categoryId);
+    public Task<List<OperationDal>> GetOperationByType(string token, Guid categoryId, string typeOperation);
     
     
 }
