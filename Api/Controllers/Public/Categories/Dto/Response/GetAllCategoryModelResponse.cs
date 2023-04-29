@@ -7,11 +7,16 @@ namespace Api.Controllers.Public.Categories.Dto.Response;
 public class GetAllCategoryModelResponse
 {
     [Required] 
-    [JsonProperty("ListCategories")] 
-    public List<GetCategoryModelResponse> ListCategories { get; init; }
+    [JsonProperty("ListCategoriesIncome")] 
+    public List<GetCategoryModelResponse> ListCategoriesIncome { get; init; }
+    
+    [Required] 
+    [JsonProperty("ListCategoriesExpenses")] 
+    public List<GetCategoryModelResponse> ListCategoriesExpenses { get; init; }
 
-    public GetAllCategoryModelResponse(List<GetCategoryModelResponse> listCategories)
+    public GetAllCategoryModelResponse(List<GetCategoryModelResponse> listCategoriesIncome, List<GetCategoryModelResponse> listCategoriesExpenses)
     {
-        ListCategories = listCategories;
+        ListCategoriesIncome = listCategoriesIncome;
+        ListCategoriesExpenses = listCategoriesExpenses;
     }
 }

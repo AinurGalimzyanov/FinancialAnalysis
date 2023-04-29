@@ -32,6 +32,9 @@ namespace Dal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
                     b.Property<string>("UserDalId")
                         .HasColumnType("text");
 
@@ -74,9 +77,6 @@ namespace Dal.Migrations
 
                     b.Property<int?>("Price")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
 
                     b.Property<string>("UserDalId")
                         .HasColumnType("text");

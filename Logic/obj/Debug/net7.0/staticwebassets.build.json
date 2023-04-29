@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZnG1a/Esdx/6R6CZKy2VxF8XeeZgonOjkyxVWUuaZrM=",
+  "Hash": "FUjV1melBBbpJELAg8yooCbs7Yl+mcpyPa1iejP/mqI=",
   "Source": "Logic",
   "BasePath": "_content/Logic",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "Dal",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishProperties": "",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildProperties": "",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],

@@ -51,6 +51,6 @@ public class DataContext : IdentityDbContext<UserDal>
         builder.Entity<CategoriesDal>().Property(u => u.Name).IsRequired(false);
         builder.Entity<OperationDal>().Property(u => u.DateTime);
         builder.Entity<OperationDal>().Property(u => u.Price).IsRequired(false);
-        builder.Entity<OperationDal>().Property(u => u.Type).IsRequired(false);
+        builder.Entity<CategoriesDal>().Property(u => u.Type).IsRequired(false);
     }
 }

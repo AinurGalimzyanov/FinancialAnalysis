@@ -84,3 +84,4 @@ E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\Humanizer.dll
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\Mono.TextTemplating.dll
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\System.CodeDom.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\appsettings.json

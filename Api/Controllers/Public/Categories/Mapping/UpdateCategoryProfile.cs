@@ -10,6 +10,7 @@ public class UpdateCategoryProfile : Profile
     {
         CreateMap<UpdateCategoryModelRequest, CategoriesDal>()
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id));
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type));
     }
 }

@@ -14,6 +14,4 @@ public class OperationDal : BaseDal<Guid>
     public CategoriesDal? CategoriesDal { get; set; }
     
     public UserDal? UserDal { get; set; }
-    
-    public string? Type { get; set; }
 }

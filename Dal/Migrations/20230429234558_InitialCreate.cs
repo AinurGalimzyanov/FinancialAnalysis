@@ -45,7 +45,7 @@ namespace Dal.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Balance = table.Column<int>(type: "integer", nullable: true),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    RefreshToken = table.Column<string>(type: "text", nullable: false),
+                    RefreshToken = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -198,7 +198,8 @@ namespace Dal.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: true),
                     DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CategoriesDalId = table.Column<Guid>(type: "uuid", nullable: true)
+                    CategoriesDalId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserDalId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,6 +208,11 @@ namespace Dal.Migrations
                         name: "FK_Operation_Categories_CategoriesDalId",
                         column: x => x.CategoriesDalId,
                         principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Operation_Users_UserDalId",
+                        column: x => x.UserDalId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -225,6 +231,11 @@ namespace Dal.Migrations
                 name: "IX_Operation_CategoriesDalId",
                 table: "Operation",
                 column: "CategoriesDalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Operation_UserDalId",
+                table: "Operation",
+                column: "UserDalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",

@@ -37,7 +37,7 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         Repository.InsertAsync(dal);
     }
 
-    public async Task<List<CategoriesDal>> GetAll(string token)
+    public async Task<List<CategoriesDal>> GetAllCategoriesByType(string token, string type)
     {
         var user = await FindUser(token);
         return _categoriesRepository.GetAllUserCategory(user.Id);

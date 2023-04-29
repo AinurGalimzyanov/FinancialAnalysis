@@ -7,11 +7,16 @@ namespace Api.Controllers.Operation.Dto.response;
 public class GetOperationsModelResponse
 {
     [Required] 
-    [JsonProperty("Operations")] 
-    public List<GetOperationModelResponse> Operations { get; init; }
+    [JsonProperty("OperationsIncome")] 
+    public List<GetOperationModelResponse> OperationsIncome { get; init; }
+    
+    [Required] 
+    [JsonProperty("OperationsExpenses")] 
+    public List<GetOperationModelResponse> OperationsExpenses { get; init; }
 
-    public GetOperationsModelResponse(List<GetOperationModelResponse> operations)
+    public GetOperationsModelResponse(List<GetOperationModelResponse> operationsIncome, List<GetOperationModelResponse> operationsExpenses)
     {
-        Operations = operations;
+        OperationsIncome = operationsIncome;
+        OperationsExpenses = operationsExpenses;
     }
 }

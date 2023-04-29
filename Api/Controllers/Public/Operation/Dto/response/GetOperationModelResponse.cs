@@ -17,6 +17,7 @@ public class GetOperationModelResponse
     [JsonProperty("DateTime")]
     public DateTime? DateTime { get; init; }
 
+
     public GetOperationModelResponse(Guid id, int? price, DateTime? dateTime)
     {
         Id = id;

@@ -5,5 +5,5 @@ namespace Dal.Operation.Repositories.Interface;
 
 public interface IOperationRepository : IBaseRepository<OperationDal, Guid>
 {
-    public List<OperationDal> GetAllUserCategoryOperation(string userId, Guid categoryId);
+    public List<OperationDal> GetAllUserCategoryOperationByType(string userId, Guid categoryId, string type);
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dal.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230423151156_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20230429234558_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,9 +81,14 @@ namespace Dal.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("integer");
 
+                    b.Property<string>("UserDalId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoriesDalId");
+
+                    b.HasIndex("UserDalId");
 
                     b.ToTable("Operation");
                 });
@@ -310,7 +315,13 @@ namespace Dal.Migrations
                         .WithMany("OperationList")
                         .HasForeignKey("CategoriesDalId");
 
+                    b.HasOne("Dal.User.Entity.UserDal", "UserDal")
+                        .WithMany("OperationList")
+                        .HasForeignKey("UserDalId");
+
                     b.Navigation("CategoriesDal");
+
+                    b.Navigation("UserDal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -372,6 +383,8 @@ namespace Dal.Migrations
             modelBuilder.Entity("Dal.User.Entity.UserDal", b =>
                 {
                     b.Navigation("CategoriesList");
+
+                    b.Navigation("OperationList");
                 });
 #pragma warning restore 612, 618
         }

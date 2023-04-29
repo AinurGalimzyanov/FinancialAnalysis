@@ -11,6 +11,8 @@ public class CategoriesDal : BaseDal<Guid>
     public string? Name { get; set; }
 
     public UserDal? UserDal { get; set; }
+    
+    public  string? Type { get; set; }
 
     public List<OperationDal>? OperationList { get; set; }
 }

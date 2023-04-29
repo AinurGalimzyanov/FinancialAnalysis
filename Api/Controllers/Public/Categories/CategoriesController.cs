@@ -65,11 +65,16 @@ public class CategoriesController : BasePublicController
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         
-        var listCategoriesDals = await _categoriesManager.GetAll(token);
-        var result = listCategoriesDals
+        var listCategoriesIncome = await _categoriesManager.GetAllCategoriesByType(token, "income");
+        var listCategoriesExpenses = await _categoriesManager.GetAllCategoriesByType(token, "expenses");
+        var resultIncome = listCategoriesIncome
             .Select(x => _mapper.Map<GetCategoryModelResponse>(x))
             .ToList();
-        return result != null ? Ok(new GetAllCategoryModelResponse(result)) : BadRequest();
+        var resultExpenses = listCategoriesExpenses
+            .Select(x => _mapper.Map<GetCategoryModelResponse>(x))
+            .ToList();
+        return resultIncome != null && resultExpenses != null?
+            Ok(new GetAllCategoryModelResponse(resultIncome, resultExpenses)) : BadRequest();
     }
     
     [HttpGet("expenseCategory/{name}")]
@@ -87,6 +92,6 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)
     {
         var category = await _categoriesManager.GetAsync(id);
-        return category != null ? Ok(new GetCategoryModelResponse(category.Name, category.Id)) : BadRequest();
+        return category != null ? Ok(new GetCategoryModelResponse(category.Name, category.Id, category.Type)) : BadRequest();
     }
 }

@@ -50,43 +50,22 @@ public class OperationController : BasePublicController
             Ok(new GetOperationModelResponse(operation.Id, operation.Price, operation.DateTime)) : BadRequest();
     }
     
-    [HttpGet("getOperationByTypeCategory")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetOperationByTypeCategory([FromBody] GetOperationByTypeModelRequest model)
-    {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        
-        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
-        var result = operations
-            .Select(x => _mapper.Map<GetOperationModelResponse>(x))
-            .ToList();
-        return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
-    }
-    
-    [HttpGet("getOperationByType")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetOperationByType([FromBody] GetOperationByTypeModelRequest model)
-    {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        
-        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
-        var result = operations
-            .Select(x => _mapper.Map<GetOperationModelResponse>(x))
-            .ToList();
-        return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
-    }
-    
     [HttpGet("getAllOperationCategory/{categoryId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetAllOperationCategory([FromRoute] Guid categoryId)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         
-        var operations = await _operationManager.GetAllOperation(token, categoryId);
-        var result = operations
+        var operationsIncome = await _operationManager.GetOperationsByType(token, categoryId, "income");
+        var operationsExpenses = await _operationManager.GetOperationsByType(token, categoryId, "expenses");
+        var resultIncome = operationsIncome
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();
-        return result != null ? Ok(new GetOperationsModelResponse(result)) : BadRequest();
+        var resultExpenses = operationsExpenses
+            .Select(x => _mapper.Map<GetOperationModelResponse>(x))
+            .ToList();
+        return resultIncome != null && resultExpenses != null ? 
+            Ok(new GetOperationsModelResponse(resultIncome, resultExpenses)) : BadRequest();
     }
     
     [HttpGet("getSumByTypeCategory")]
@@ -95,7 +74,7 @@ public class OperationController : BasePublicController
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         
-        var operations = await _operationManager.GetOperationByType(token, model.CategoryId, model.Type);
+        var operations = await _operationManager.GetOperationsByType(token, model.CategoryId, model.Type);
         var result = operations
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();

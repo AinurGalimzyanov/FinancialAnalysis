@@ -42,8 +42,8 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         var category = await _categoriesRepository.GetAsync(categoryId);
         dal.CategoriesDal = category;
         dal.UserDal = user;
-        var expensesList = await GetOperationByType(token, categoryId, "expanses");
-        var incomeList = await GetOperationByType(token, categoryId, "income");
+        var expensesList = await GetOperationsByType(token, categoryId, "expanses");
+        var incomeList = await GetOperationsByType(token, categoryId, "income");
         var expenses = expensesList.Count != 0 ? expensesList.Select(x => x.Price).Sum() : 0;
         var income = incomeList.Count != 0 ? incomeList.Select(x => x.Price).Sum() : 0;
         if (income - expenses >= 0)
@@ -54,16 +54,10 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         }
     }
 
-    public async Task<List<OperationDal>> GetAllOperation(string token, Guid categoryId)
+    public async Task<List<OperationDal>> GetOperationsByType(string token, Guid categoryId, string type)
     {
         var user = await FindUser(token);
-        return _operationRepository.GetAllUserCategoryOperation(user.Id, categoryId);
+        return _operationRepository.GetAllUserCategoryOperationByType(user.Id, categoryId, type);
     }
-
-    public async Task<List<OperationDal>> GetOperationByType(string token, Guid categoryId, string typeOperation)
-    {
-        var user = await FindUser(token);
-        var operations = _operationRepository.GetAllUserCategoryOperation(user.Id, categoryId);
-        return operations.Where(x => x.Type == typeOperation).ToList();
-    }
+    
 }

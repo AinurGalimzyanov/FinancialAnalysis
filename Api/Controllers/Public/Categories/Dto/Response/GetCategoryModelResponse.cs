@@ -13,10 +13,16 @@ public class GetCategoryModelResponse
     [Required] 
     [JsonProperty("Id")] 
     public Guid Id { get; init; }
+    
+    [Required] 
+    [JsonProperty("Type")] 
+    public string Type { get; init; }
+    
 
-    public GetCategoryModelResponse(string name, Guid Id)
+    public GetCategoryModelResponse(string name, Guid id, string type)
     {
         this.name = name;
-        this.Id = Id;
+        Id = id;
+        Type = type;
     }
 }

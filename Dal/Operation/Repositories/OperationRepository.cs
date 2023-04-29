@@ -14,15 +14,10 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
         _context = context;
     }
     
-    public  List<OperationDal> GetAllUserCategoryOperation(string userId, Guid categoryId)
+    public  List<OperationDal> GetAllUserCategoryOperationByType(string userId, Guid categoryId, string type)
     {
-        var var2 = _context.Set<OperationDal>()
-            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
-            .ToList();
-       
-        
         return _context.Set<OperationDal>()
-            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId && x.CategoriesDal.Type == type)
             .ToList();
     }
 }
