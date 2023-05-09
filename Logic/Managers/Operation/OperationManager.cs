@@ -94,7 +94,6 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     {
         var user = await FindUser(token);
         return user.Balance;
-        ;
     }
 
 
