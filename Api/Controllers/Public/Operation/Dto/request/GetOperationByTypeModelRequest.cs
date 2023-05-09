@@ -8,8 +8,8 @@ public class GetOperationByTypeModelRequest
     [Required]
     [JsonProperty("Type")]
     public required string Type { get; init; }
-    
+
     [Required]
-    [JsonProperty("CategoryId")]
-    public required Guid CategoryId { get; init; }
+    [JsonProperty("DateTime")]
+    public required DateTime DateTime { get; init; }
 }

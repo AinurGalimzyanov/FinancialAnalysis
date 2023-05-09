@@ -28,6 +28,11 @@ public class BaseManager<T, TI> : IBaseManager<T, TI> where T : BaseDal<TI>
         return await Repository.GetAsync(id);
     }
 
+    public async Task<List<T?>> GetAllAsync()
+    {
+        return await Repository.GetAllAsync();
+    }
+
     public async Task<TI> UpdateAsync(T dal)
     {
         return await Repository.UpdateAsync(dal);

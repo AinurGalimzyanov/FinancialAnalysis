@@ -85,3 +85,6 @@ E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\Microsoft.Ent
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\Mono.TextTemplating.dll
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\System.CodeDom.dll
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\appsettings.json
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\MailKit.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\bin\Debug\net7.0\MimeKit.dll

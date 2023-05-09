@@ -101,6 +101,9 @@ namespace Dal.Migrations
                     b.Property<int?>("Balance")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("CheckExistenceMail")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");

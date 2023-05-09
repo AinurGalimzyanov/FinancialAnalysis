@@ -6,8 +6,8 @@ namespace Api.Controllers.Public.Categories.Dto.Request;
 public class UpdateCategoryModelRequest
 {
     [Required]
-    [JsonProperty("Id")]
-    public required Guid Id { get; init; }
+    [JsonProperty("CategoryId")]
+    public required Guid CategoryId { get; init; }
     
     [Required]
     [JsonProperty("Name")]

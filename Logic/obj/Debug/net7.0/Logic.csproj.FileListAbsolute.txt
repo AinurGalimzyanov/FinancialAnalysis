@@ -86,3 +86,7 @@ E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\obj\Debug\net7.0\refint\Logi
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\obj\Debug\net7.0\Logic.pdb
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\obj\Debug\net7.0\Logic.genruntimeconfig.cache
 E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\obj\Debug\net7.0\ref\Logic.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\appsettings.json
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\MailKit.dll
+E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Logic\bin\Debug\net7.0\MimeKit.dll

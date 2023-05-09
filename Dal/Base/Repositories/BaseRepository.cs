@@ -37,6 +37,12 @@ public class BaseRepository<T, TI> : IBaseRepository<T, TI> where T : BaseDal<TI
         var entity = await _dbSet.FindAsync(id);
         return entity;
     }
+    
+    public async Task<List<T?>> GetAllAsync()
+    {
+        var entitys = await _dbSet.ToListAsync();
+        return entitys;
+    }
 
     public async Task<TI> UpdateAsync(T dal)
     {

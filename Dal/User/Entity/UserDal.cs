@@ -12,6 +12,8 @@ public class UserDal : IdentityUser
     
     [MaxLength(255)]
     public string Name { get; set; }
+
+    public bool CheckExistenceMail { get; set; } 
     
     public string? RefreshToken { get; set; }
 

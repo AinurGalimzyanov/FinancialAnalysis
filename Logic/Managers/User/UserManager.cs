@@ -13,7 +13,13 @@ public class UserManager
         _signInManager = signInManager;
         _userManager = userManager;
     }
-    
-    
-    
+
+    public async Task<string> RecoverPassword(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        var newPassword = Guid.NewGuid().ToString();
+        await _userManager.RemovePasswordAsync(user);
+        await _userManager.AddPasswordAsync(user, newPassword);
+        return newPassword;
+    }
 }

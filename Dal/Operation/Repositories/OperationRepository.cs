@@ -13,12 +13,44 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
     {
         _context = context;
     }
-    
-    public  List<OperationDal> GetAllUserCategoryOperationByType(string userId, Guid categoryId, string type)
+
+    private bool EqualsDate(string dateNow, string dateOperation)
     {
-        return _context.Set<OperationDal>()
-            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId && x.CategoriesDal.Type == type)
-            .ToList();
+        return dateNow.Take(1).ToString() == dateOperation.Take(1).ToString();
+    }
+
+
+    public async Task<List<OperationDal>> GetAllOperationByCategoryAsync(string userId, Guid categoryId, DateTime date)
+    {
+        var operations = await _context
+            .Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
+            .Where(x => x.DateTime.Value.Year == date.Year &&
+                        x.DateTime.Value.Month == date.Month)
+            .ToListAsync();
+        return operations;
+    }
+
+    public async Task<List<OperationDal>> GetAllOperationByTypeAsync(string userId, string type, DateTime date)
+    {
+        var operations = await _context
+            .Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Type == type )
+            .Where(x => x.DateTime.Value.Year == date.Year &&
+                        x.DateTime.Value.Month == date.Month)
+            .ToListAsync();
+        return operations;
+    }
+
+    public async Task<List<OperationDal>> GetAllOperationsAsync(string userId, DateTime date)
+    {
+        var operations = await _context
+            .Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId)
+            .Where(x => x.DateTime.Value.Year == date.Year &&
+                        x.DateTime.Value.Month == date.Month)
+            .ToListAsync();
+        return operations;
     }
 }
 

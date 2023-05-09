@@ -8,6 +8,4 @@ public interface ICategoriesManager : IBaseManager<CategoriesDal, Guid>
      public Task CreateCategories(string token, CategoriesDal dal);
      
      public Task<List<CategoriesDal>> GetAllCategoriesByType(string token, string type);
-
-     public Task<int> GetExpenseAsync(string token, string nameCategory);
 }

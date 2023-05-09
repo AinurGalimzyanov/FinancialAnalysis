@@ -39,10 +39,10 @@ public class CategoriesController : BasePublicController
         
         var newCategory = _mapper.Map<CategoriesDal>(model);
         await _categoriesManager.CreateCategories(token, newCategory);
-        return Ok(newCategory.Id);
+        return Ok(new GetCategoryModelResponse(newCategory.Name, newCategory.Id, newCategory.Type));
     }
     
-    [HttpPost("update")]
+    [HttpPut("update")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryModelRequest model)
     {
@@ -51,7 +51,7 @@ public class CategoriesController : BasePublicController
         return Ok();
     }
     
-    [HttpPost("delete/{id}")]
+    [HttpDelete("delete/{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     { 
@@ -76,17 +76,7 @@ public class CategoriesController : BasePublicController
         return resultIncome != null && resultExpenses != null?
             Ok(new GetAllCategoryModelResponse(resultIncome, resultExpenses)) : BadRequest();
     }
-    
-    [HttpGet("expenseCategory/{name}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetExpenseCategory([FromRoute] string name)
-    {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        
-        var result = await _categoriesManager.GetExpenseAsync(token, name);
-        return result != null ? Ok(result) : BadRequest();
-    }
-    
+
     [HttpGet("getCategory/{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)

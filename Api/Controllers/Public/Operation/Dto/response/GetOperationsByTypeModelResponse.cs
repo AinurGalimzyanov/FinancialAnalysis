@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Api.Controllers.Operation.Dto.response;
 
-public class GetOperationsModelResponse
+public class GetOperationsByTypeModelResponse
 {
     [Required] 
     [JsonProperty("OperationsIncome")] 
@@ -14,7 +14,7 @@ public class GetOperationsModelResponse
     [JsonProperty("OperationsExpenses")] 
     public List<GetOperationModelResponse> OperationsExpenses { get; init; }
 
-    public GetOperationsModelResponse(List<GetOperationModelResponse> operationsIncome, List<GetOperationModelResponse> operationsExpenses)
+    public GetOperationsByTypeModelResponse(List<GetOperationModelResponse> operationsIncome, List<GetOperationModelResponse> operationsExpenses)
     {
         OperationsIncome = operationsIncome;
         OperationsExpenses = operationsExpenses;

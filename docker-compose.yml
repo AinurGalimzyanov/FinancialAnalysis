@@ -16,14 +16,14 @@ services:
     depends_on:
       - postgres_db
     environment:
-      - ConnectionStrings__DefaultConnection=Server=postgres_db;Port=5432;Database=ProjectDataBase2; User Id=postgres;Password=123457;TrustServerCertificate=True;Pooling=true;
+      - ConnectionStrings__DefaultConnection=Server=postgres_db;Port=5432;Database=FinancialAnalysisDB2; User Id=postgres;Password=123457;TrustServerCertificate=True;Pooling=true;
   postgres_db:
     container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123457
-      POSTGRES_DB: ProjectDataBase2
+      POSTGRES_DB: FinancialAnalysisDB2
     ports:
       - "5433:5432"
     restart: always

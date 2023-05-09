@@ -10,5 +10,7 @@ public interface IBaseRepository<T, TI> where T : BaseDal<TI>
     
     public Task<T?> GetAsync(TI id);
     
+    public Task<List<T?>> GetAllAsync();
+    
     public Task<TI> UpdateAsync(T dal);
 }

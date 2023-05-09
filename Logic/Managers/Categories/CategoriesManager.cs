@@ -40,15 +40,7 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
     public async Task<List<CategoriesDal>> GetAllCategoriesByType(string token, string type)
     {
         var user = await FindUser(token);
-        return _categoriesRepository.GetAllUserCategory(user.Id);
-    }
-
-    public async Task<int> GetExpenseAsync(string token, string nameCategory)
-    {
-        var user = await FindUser(token);
-        var categories = user.CategoriesList.FirstOrDefault(x => x.Name == nameCategory);
-        var expense = categories.OperationList.Select(x => x.Price).Sum();
-        return 0;
+        return await _categoriesRepository.GetAllUserCategory(user.Id, type);
     }
 
 }

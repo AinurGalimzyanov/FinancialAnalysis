@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+
+namespace Api.Controllers.Operation.Dto.request;
+
+public class SumByTypeCategoryModelRequest
+{
+    [Required]
+    [JsonProperty("CategoryId")]
+    public required Guid CategoryId { get; init; }
+    
+    [Required]
+    [JsonProperty("DateTime")]
+    public required DateTime DateTime { get; init; }
+}
