@@ -126,11 +126,11 @@ public class OperationController : BasePublicController
     
     [HttpGet("getSumByType")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetSumByType([FromBody] GetOperationByTypeModelRequest model)
+    public async Task<IActionResult> GetSumByType([FromBody] GetSumByTypeModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         
-        var operations = await _operationManager.GetOperationsByTypeAsync(token, model.Type, model.DateTime);
+        var operations = await _operationManager.GetOperationsByTypeAsync(token, model.Type, DateTime.UtcNow);
         var result = operations
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();
