@@ -1,5 +1,5 @@
-**/.appsettings.Development.json
-**/.appsettings.json
+appsettings.json
+appsettings.Development.json
 **/.Dal/appsettings.json
 **/.Dal/Migrations/
 **/.Dockerfile
