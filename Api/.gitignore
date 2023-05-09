@@ -1,8 +1,8 @@
-/appsettings.Development.json
-appsettings.json
-/Dal/appsettings.json
-/Dal/Migrations/
-/Dockerfile
-/docker-compose.yml
-/.gitlab-ci.yml
-/bin
+**/appsettings.Development.json
+**/appsettings.json
+**/Dal/appsettings.json
+**/Dal/Migrations/
+**/Dockerfile
+**/docker-compose.yml
+**/.gitlab-ci.yml
+**/bin
