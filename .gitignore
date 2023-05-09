@@ -2,6 +2,7 @@ appsettings.json
 appsettings.Development.json
 /Dal/appsettings.json
 .\Dal\bin\
+.\Dal\Migrations\
 /Dal/Migrations/
 **/.Dockerfile
 **/.docker-compose.yml
