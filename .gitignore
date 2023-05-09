@@ -1,7 +1,7 @@
 appsettings.json
 appsettings.Development.json
-**/.Dal/appsettings.json
-**/.Dal/Migrations/
+/Dal/appsettings.json
+/Dal/Migrations/
 **/.Dockerfile
 **/.docker-compose.yml
 **/.gitlab-ci.yml
