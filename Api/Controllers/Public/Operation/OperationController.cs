@@ -50,7 +50,7 @@ public class OperationController : BasePublicController
             Ok(new GetOperationModelResponse(operation.Id, operation.Price, operation.DateTime)) : BadRequest();
     }
     
-    [HttpGet("getOperationByCategory")]
+    [HttpPost("getOperationByCategory")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetOperationByCategory([FromBody] OperationsByCategoryModelRequest model)
     {
@@ -64,7 +64,7 @@ public class OperationController : BasePublicController
             Ok(new GetOperationsByCategoryModelResponse(result)) : BadRequest();
     }
     
-    [HttpGet("getOperationsBothType")]
+    [HttpPost("getOperationsBothType")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetOperationsBothType([FromBody] GetOperationsBothTypeModelRequest model)
     {
@@ -82,7 +82,7 @@ public class OperationController : BasePublicController
             Ok(new GetOperationsByTypeModelResponse(resultIncome, resultExpeses)) : BadRequest();
     }
     
-    [HttpGet("getLastFiveOperations")]
+    [HttpPost("getLastFiveOperations")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetLastFiveOperations([FromBody] GetLastFiveOperationsModelRequest model)
     {
@@ -96,7 +96,7 @@ public class OperationController : BasePublicController
     }
     
     
-    [HttpGet("getLastFiveOperationsBothTypeAsync")]
+    [HttpPost("getLastFiveOperationsBothTypeAsync")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetLastFiveOperationsBothTypeAsync([FromBody] GetOperationsBothTypeModelRequest model)
     {
@@ -113,7 +113,7 @@ public class OperationController : BasePublicController
             Ok(new GetOperationsByTypeModelResponse(resultIncome, resultExpeses)) : BadRequest();
     }
 
-    [HttpGet("getSumByCategory")]
+    [HttpPost("getSumByCategory")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetSumByCategory([FromBody] SumByTypeCategoryModelRequest model)
     {
@@ -124,7 +124,7 @@ public class OperationController : BasePublicController
         return sum != null ? Ok(new GetSumByTypeCategoryModelResponse(sum)) : BadRequest();
     }
     
-    [HttpGet("getSumByType")]
+    [HttpPost("getSumByType")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetSumByType([FromBody] GetSumByTypeModelRequest model)
     {
