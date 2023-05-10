@@ -37,17 +37,13 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         ;
     }
 
-    private DateTime GetDateWithUtc(DateTime dateTime)
-    {
-        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, DateTimeKind.Utc);
-    }
+   
 
     public async Task CreateOperation(string token, OperationDal dal, Guid categoryId)
     {
         var user = await FindUser(token);
         dal.CategoriesDal = await _categoriesRepository.GetAsync(categoryId);
         dal.UserDal = user;
-        dal.DateTime = GetDateWithUtc(dal.DateTime.Value);
         var currentPrice = dal.CategoriesDal.Type == "income" ? dal.Price : -dal.Price;
         var isSet = await SetBalanceAfterNewOperation(user, currentPrice);
         if (isSet)
