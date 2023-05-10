@@ -16,12 +16,17 @@ public class GetOperationModelResponse
     [Required]
     [JsonProperty("DateTime")]
     public DateTime? DateTime { get; init; }
+    
+    [Required]
+    [JsonProperty("Name")]
+    public string? Name { get; init; }
 
 
-    public GetOperationModelResponse(Guid id, int? price, DateTime? dateTime)
+    public GetOperationModelResponse(Guid id, int? price, DateTime? dateTime, string? name)
     {
         Id = id;
         Price = price;
         DateTime = dateTime;
+        Name = name;
     }
 }

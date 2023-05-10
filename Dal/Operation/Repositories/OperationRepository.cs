@@ -52,5 +52,16 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .ToListAsync();
         return operations;
     }
+
+    public async Task<string> GetNameCategoryAsync(Guid operationId)
+    {
+        var dal = await _context
+            .Set<OperationDal>()
+            .Include(x => x.CategoriesDal)
+            .FirstOrDefaultAsync(x => x.Id == operationId);
+
+        return dal.CategoriesDal.Name;
+
+    }
 }
 

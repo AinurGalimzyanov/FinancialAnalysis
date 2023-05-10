@@ -13,6 +13,8 @@ public interface IOperationManager : IBaseManager<OperationDal, Guid>
     public Task CreateBalanceAsync(string token, int newBalance);
     public Task<List<OperationDal>> GetLastFiveOperationsAsync(string token, DateTime date);
     public Task<List<OperationDal>> GetLastFiveOperationsBothTypeAsync(string token, string type, DateTime date);
+    public Task<string> GetNameCategory(Guid categoryId);
+    public Task<string> GetNameCategoryByCategoryId(Guid categoryId);
 
 
 }

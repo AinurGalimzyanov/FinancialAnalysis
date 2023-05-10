@@ -113,4 +113,15 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         var allOperations = await _operationRepository.GetAllOperationByTypeAsync(user.Id, type, date);
         return allOperations.Take(5).ToList();
     }
+
+    public async Task<string> GetNameCategory(Guid operationId)
+    {
+        return await _operationRepository.GetNameCategoryAsync(operationId);
+    }
+    
+    public async Task<string> GetNameCategoryByCategoryId(Guid categoryId)
+    {
+        var category = await _categoriesRepository.GetAsync(categoryId);
+        return category.Name;
+    }
 }

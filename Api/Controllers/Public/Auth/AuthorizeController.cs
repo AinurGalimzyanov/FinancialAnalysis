@@ -148,7 +148,7 @@ public class AuthorizeController : BasePublicController
         return Unauthorized();
     }
     
-    [HttpDelete("signout")]
+    [HttpPost("signout")]
     public async Task<IActionResult> SignOut()
     {
         await _signInManager.SignOutAsync();

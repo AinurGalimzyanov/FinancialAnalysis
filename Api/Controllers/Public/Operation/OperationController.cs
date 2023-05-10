@@ -29,7 +29,8 @@ public class OperationController : BasePublicController
         
         var newOperation = _mapper.Map<OperationDal>(model);
         await _operationManager.CreateOperation(token, newOperation, model.CategoryId);
-        return Ok(new GetOperationModelResponse(newOperation.Id, newOperation.Price, newOperation.DateTime));
+        var name = await _operationManager.GetNameCategoryByCategoryId(model.CategoryId);
+        return Ok(new GetOperationModelResponse(newOperation.Id, newOperation.Price, newOperation.DateTime, name));
     }
     
     [HttpPut("update")]
@@ -38,7 +39,8 @@ public class OperationController : BasePublicController
     {
         var newOperation = _mapper.Map<OperationDal>(model);
         await _operationManager.UpdateAsync(newOperation);
-        return Ok(new GetOperationModelResponse(newOperation.Id, newOperation.Price, newOperation.DateTime));
+        var name = await _operationManager.GetNameCategory(newOperation.Id);
+        return Ok(new GetOperationModelResponse(newOperation.Id, newOperation.Price, newOperation.DateTime, name));
     }
     
     [HttpGet("getOperation/{id}")]
@@ -46,8 +48,9 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetOperation([FromRoute] Guid id)
     {
         var operation = await _operationManager.GetAsync(id);
+        var name = await _operationManager.GetNameCategory(operation.Id);
         return operation != null ? 
-            Ok(new GetOperationModelResponse(operation.Id, operation.Price, operation.DateTime)) : BadRequest();
+            Ok(new GetOperationModelResponse(operation.Id, operation.Price, operation.DateTime, name)) : BadRequest();
     }
     
     [HttpPost("getOperationByCategory")]
@@ -88,9 +91,14 @@ public class OperationController : BasePublicController
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         var lastFiveOperation = await _operationManager.GetLastFiveOperationsAsync(token, model.DateTime);
-        var result = lastFiveOperation
+        var result = new List<GetOperationModelResponse>();
+        foreach (var i in lastFiveOperation)
+        {
+            result.Add(new GetOperationModelResponse(i.Id, i.Price, i.DateTime, await _operationManager.GetNameCategory(i.Id)));
+        }
+        /*var result = lastFiveOperation
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
-            .ToList();
+            .ToList();*/
         return result != null  ? 
             Ok(new GetLastFiveOperationsModelResponse(result)) : BadRequest();
     }
@@ -103,12 +111,22 @@ public class OperationController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         var lastFiveOperationIncome = await _operationManager.GetLastFiveOperationsBothTypeAsync(token, "income", model.DateTime);
         var lastFiveOperationExpenses = await _operationManager.GetLastFiveOperationsBothTypeAsync(token, "expenses", model.DateTime);
-        var resultIncome = lastFiveOperationIncome
+        var resultIncome = new List<GetOperationModelResponse>();
+        foreach (var i in lastFiveOperationIncome)
+        {
+            resultIncome.Add(new GetOperationModelResponse(i.Id, i.Price, i.DateTime, await _operationManager.GetNameCategory(i.Id)));
+        }
+        var resultExpeses = new List<GetOperationModelResponse>();
+        foreach (var i in lastFiveOperationExpenses)
+        {
+            resultExpeses.Add(new GetOperationModelResponse(i.Id, i.Price, i.DateTime, await _operationManager.GetNameCategory(i.Id)));
+        }
+        /*var resultIncome = lastFiveOperationIncome
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
             .ToList();
         var resultExpeses = lastFiveOperationExpenses
             .Select(x => _mapper.Map<GetOperationModelResponse>(x))
-            .ToList();
+            .ToList();*/
         return resultIncome != null && resultExpeses != null? 
             Ok(new GetOperationsByTypeModelResponse(resultIncome, resultExpeses)) : BadRequest();
     }
@@ -131,11 +149,8 @@ public class OperationController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         
         var operations = await _operationManager.GetOperationsByTypeAsync(token, model.Type, DateTime.UtcNow);
-        var result = operations
-            .Select(x => _mapper.Map<GetOperationModelResponse>(x))
-            .ToList();
-        var sum = result.Select(x => x.Price).Sum();
-        return result != null ? Ok(new GetSumByTypeCategoryModelResponse(sum)) : BadRequest();
+        var sum = operations.Select(x => x.Price).Sum();
+        return sum != null ? Ok(new GetSumByTypeCategoryModelResponse(sum)) : BadRequest();
     }
     
     [HttpGet("getBalance")]
