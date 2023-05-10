@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Dal.Categories.Entity;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Public.Categories.Dto.Response;
+namespace Logic.Managers.Categories.Dto.Response;
 
 public class GetCategoryModelResponse
 {
@@ -17,8 +16,10 @@ public class GetCategoryModelResponse
     [Required] 
     [JsonProperty("Type")] 
     public string Type { get; init; }
-
-    [Required] [JsonProperty("Sum")] public int? Sum { get; init; } = 0;
+    
+    [Required] 
+    [JsonProperty("Sum")] 
+    public int? Sum { get; init; }
 
     public GetCategoryModelResponse(string name, Guid id, string type, int? sum)
     {

@@ -36,10 +36,10 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoriesModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        
         var newCategory = _mapper.Map<CategoriesDal>(model);
         await _categoriesManager.CreateCategories(token, newCategory);
-        return Ok(new GetCategoryModelResponse(newCategory.Name, newCategory.Id, newCategory.Type));
+        var sum = await _categoriesManager.GetSumCategory(newCategory.Id);
+        return Ok(new GetCategoryModelResponse(newCategory.Name, newCategory.Id, newCategory.Type, sum));
     }
     
     [HttpPut("update")]
@@ -67,14 +67,25 @@ public class CategoriesController : BasePublicController
         
         var listCategoriesIncome = await _categoriesManager.GetAllCategoriesByType(token, "income");
         var listCategoriesExpenses = await _categoriesManager.GetAllCategoriesByType(token, "expenses");
-        var resultIncome = listCategoriesIncome
-            .Select(x => _mapper.Map<GetCategoryModelResponse>(x))
+        var result1 = new List<GetCategoryModelResponse>();
+        var result2 = new List<GetCategoryModelResponse>();
+         
+        foreach (var i in listCategoriesIncome)
+        {
+            result1.Add(new GetCategoryModelResponse(i.Name, i.Id, i.Type, await _categoriesManager.GetSumCategory(i.Id)));
+        }
+        foreach (var i in listCategoriesExpenses)
+        {
+            result2.Add(new GetCategoryModelResponse(i.Name, i.Id, i.Type, await _categoriesManager.GetSumCategory(i.Id)));
+        }
+        /*var resultIncome = listCategoriesIncome
+            .Select(x => _mapper.Map<GetCategoryModelResponse>(await _categoriesManager.GetSumCategory(x.Id)))
             .ToList();
         var resultExpenses = listCategoriesExpenses
-            .Select(x => _mapper.Map<GetCategoryModelResponse>(x))
-            .ToList();
-        return resultIncome != null && resultExpenses != null?
-            Ok(new GetAllCategoryModelResponse(resultIncome, resultExpenses)) : BadRequest();
+            .Select(x => new GetCategoryModelResponse(x.Name, x.Id, x.Type, await _categoriesManager.GetSumCategory(x.Id)))
+            .ToList();*/
+        return result1 != null && result2 != null?
+            Ok(new GetAllCategoryModelResponse(result1, result2)) : BadRequest();
     }
 
     [HttpGet("getCategory/{id}")]
@@ -82,6 +93,7 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)
     {
         var category = await _categoriesManager.GetAsync(id);
-        return category != null ? Ok(new GetCategoryModelResponse(category.Name, category.Id, category.Type)) : BadRequest();
+        var sum = await _categoriesManager.GetSumCategory(category.Id);
+        return category != null ? Ok(new GetCategoryModelResponse(category.Name, category.Id, category.Type, sum)) : BadRequest();
     }
 }

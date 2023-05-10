@@ -56,15 +56,15 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         }
     }
 
-    private async Task<int?> GetSumByType(string userId, string type)
+    /*private async Task<int?> GetSumByType(string userId, string type)
     {
         var categoryTypeList = await _operationRepository.GetAllOperationByTypeAsync(userId, type, DateTime.UtcNow);
         return categoryTypeList.Count != 0 ? categoryTypeList.Select(x => x.Price).Sum() : 0;
-    }
+    }*/
 
     private async Task<bool> SetBalanceAfterNewOperation(UserDal user, int? currentPrice)
     {
-        var balance = await GetSumByType(user.Id, "income") - await GetSumByType(user.Id, "expenses") + currentPrice;
+        var balance = await GetBalanceAsync(user.RefreshToken) + currentPrice;
 
         if (balance >= 0)
         {

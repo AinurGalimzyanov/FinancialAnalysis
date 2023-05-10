@@ -8,9 +8,10 @@ public class GetCategoryRequestProfile : Profile
 {
     public GetCategoryRequestProfile()
     {
-        CreateMap<CategoriesDal, GetCategoryModelResponse>()
-            .ForMember(dst => dst.name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type));
+        CreateMap<Tuple<CategoriesDal, int?>, GetCategoryModelResponse>()
+            .ForMember(dst => dst.name, opt => opt.MapFrom(src => src.Item1.Name))
+            .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Item1.Id))
+            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Item1.Type))
+            .ForMember(dst => dst.Sum, opt => opt.MapFrom(src => src.Item2));
     }
 }
