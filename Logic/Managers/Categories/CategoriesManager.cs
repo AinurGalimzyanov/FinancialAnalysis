@@ -7,7 +7,6 @@ using Dal.Categories.Repositories;
 using Dal.Categories.Repositories.Interface;
 using Dal.User.Entity;
 using Logic.Managers.Base;
-using Logic.Managers.Categories.Dto.Response;
 using Logic.Managers.Categories.Interface;
 using Microsoft.AspNetCore.Identity;
 
@@ -34,25 +33,30 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         return user;
     }
     
-    public async Task CreateCategories(string token, CategoriesDal dal)
+    public async Task<int?> CreateCategories(string token, CategoriesDal dal)
     {
         var user = await FindUser(token);
+        var sum = await _categoriesRepository.GetSumCategory(dal.Id);
         dal.UserDal = user;
-        Repository.InsertAsync(dal);
+        await Repository.InsertAsync(dal);
+        return sum;
     }
 
-    public async Task<List<CategoriesDal>> GetAllCategoriesByType(string token, string type)
+    public async Task<(List<CategoriesDal>, List<CategoriesDal>)> GetAllCategoriesByType(string token)
     {
         var user = await FindUser(token);
-        return await _categoriesRepository.GetAllUserCategory(user.Id, type);;
+        var listIncome = await _categoriesRepository.GetAllUserCategory(user.Id, "income");
+        var listExpenses = await _categoriesRepository.GetAllUserCategory(user.Id, "expenses");
+        
+        
+        return new(listIncome, listExpenses);
     }
 
     public async Task<int?> GetSumCategory(Guid categoryId)
     {
-        /*var r = await _categoriesRepository.GetAsync(categoryId);
+        var category = await GetAsync(categoryId);
         var sum = await _categoriesRepository.GetSumCategory(categoryId);
-        var resutl = new Tuple<CategoriesDal, int?>(r, sum);*/
-        return await _categoriesRepository.GetSumCategory(categoryId);
+        return sum;
     }
 
 }

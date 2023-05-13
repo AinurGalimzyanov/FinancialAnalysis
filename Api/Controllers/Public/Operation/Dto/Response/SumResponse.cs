@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Operation.Dto.response;
+namespace Logic.Managers.Operation.Dto.Response;
 
-public class GetSumByTypeCategoryModelResponse
+public class SumResponse
 {
     [Required]
     [JsonProperty("Sum")]
     public int? Sum { get; init; }
 
-    public GetSumByTypeCategoryModelResponse(int? sum)
+    public SumResponse(int? sum)
     {
         Sum = sum;
     }

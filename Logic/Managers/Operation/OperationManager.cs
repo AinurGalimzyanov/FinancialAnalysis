@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using AutoMapper;
 using Dal.Base.Repositories.Interface;
 using Dal.Categories.Entity;
 using Dal.Categories.Repositories.Interface;
@@ -9,7 +10,9 @@ using Dal.User.Entity;
 using Logic.Managers.Base;
 using Logic.Managers.Categories.Interface;
 using Logic.Managers.Operation.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Logic.Managers.Operation;
 
@@ -18,13 +21,15 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     private readonly UserManager<UserDal> _userManager;
     private readonly IOperationRepository _operationRepository;
     private readonly ICategoriesRepository _categoriesRepository;
+    private readonly IMapper _mapper;
 
     public OperationManager(IOperationRepository repository,
-        UserManager<UserDal> userManager, ICategoriesRepository categoriesRepository) : base(repository)
+        UserManager<UserDal> userManager, ICategoriesRepository categoriesRepository, IMapper mapper) : base(repository)
     {
         _userManager = userManager;
         _operationRepository = repository;
         _categoriesRepository = categoriesRepository;
+        _mapper = mapper;
     }
 
     private async Task<UserDal> FindUser(string token)
@@ -34,21 +39,24 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         if (jwt.ValidTo < DateTime.UtcNow) return null;
         var email = jwt.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         return await _userManager.FindByEmailAsync(email);
-        ;
     }
 
    
 
-    public async Task CreateOperation(string token, OperationDal dal, Guid categoryId)
+    public async Task CreateOperation(string token, OperationDal operation, Guid categoryId)
     {
         var user = await FindUser(token);
-        dal.CategoriesDal = await _categoriesRepository.GetAsync(categoryId);
-        dal.UserDal = user;
-        var currentPrice = dal.CategoriesDal.Type == "income" ? dal.Price : -dal.Price;
+        operation.CategoriesDal = await _categoriesRepository.GetAsync(categoryId);
+        operation.UserDal = user;
+        var currentPrice = operation.CategoriesDal.Type == "income" ? operation.Price : -operation.Price;
         var isSet = await SetBalanceAfterNewOperation(user, currentPrice);
         if (isSet)
         {
-            await _operationRepository.InsertAsync(dal);
+            await _operationRepository.InsertAsync(operation);
+        }
+        else
+        {
+            throw new ArgumentException("На балансе недостаточно срдеств");
         }
     }
 
@@ -60,30 +68,39 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
 
     private async Task<bool> SetBalanceAfterNewOperation(UserDal user, int? currentPrice)
     {
-        var balance = await GetBalanceAsync(user.RefreshToken) + currentPrice;
+        var balance = await GetBalanceAsync(user.RefreshToken);
+        var newBalance = balance + currentPrice;
 
-        if (balance >= 0)
+        if (newBalance >= 0)
         {
-            user.Balance = balance;
+            user.Balance = newBalance;
             await _userManager.UpdateAsync(user);
             return true;
         }
 
         return false;
     }
-
-    public async Task<List<OperationDal>> GetOperationsByTypeAsync(string token, string type, DateTime date)
+    
+    public async Task<List<OperationDal>> GetAllOperations(string token, DateTime dateTime)
     {
         var user = await FindUser(token);
-        return await _operationRepository.GetAllOperationByTypeAsync(user.Id, type, date);
+        var operations = await _operationRepository.GetAllOperationsAsync(user.Id, dateTime);
+        return operations;
     }
 
-
-
-    public async Task<List<OperationDal>> GetOperationsByCategoryAsync(string token, Guid categoryId, DateTime date)
+    public async Task<(List<OperationDal>, List<OperationDal>)> GetOperationsByTypeAsync(string token, DateTime dateTime)
     {
         var user = await FindUser(token);
-        return await _operationRepository.GetAllOperationByCategoryAsync(user.Id, categoryId, date);
+        var operationsIncome = await _operationRepository.GetAllOperationByTypeAsync(user.Id, "income", dateTime);
+        var operationsExpenses = await _operationRepository.GetAllOperationByTypeAsync(user.Id, "expenses", dateTime);
+        return new(operationsIncome, operationsExpenses);
+    }
+
+    public async Task<List<OperationDal>> GetOperationsByCategoryAsync(string token, Guid categoryId, DateTime dateTime)
+    {
+        var user = await FindUser(token);
+        var operations = await _operationRepository.GetAllOperationByCategoryAsync(user.Id, categoryId, dateTime);
+        return operations;
     }
 
     public async Task<int?> GetBalanceAsync(string token)
@@ -99,29 +116,53 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         user.Balance = newBalance;
         await _userManager.UpdateAsync(user);
     }
-
-    public async Task<List<OperationDal>> GetLastFiveOperationsAsync(string token, DateTime date)
+    
+    
+    public async Task DeleteOperation(Guid operationId, string token)
     {
         var user = await FindUser(token);
-        var allOperations = await _operationRepository.GetAllOperationsAsync(user.Id, date);
-        return allOperations.Take(5).ToList();
+        var operation = await GetAsync(operationId);
+        var category = await _operationRepository.GetOperationCategory(operation.Id);
+        var price = category.Type == "income" ? -operation.Price : operation.Price;
+        user.Balance += price;
+        await _userManager.UpdateAsync(user);
+        await DeleteAsync(operationId);
     }
 
-    public async Task<List<OperationDal>> GetLastFiveOperationsBothTypeAsync(string token, string type, DateTime date)
+    public async Task UpdateOperation(string token, OperationDal operation, int oldPrice)
     {
         var user = await FindUser(token);
-        var allOperations = await _operationRepository.GetAllOperationByTypeAsync(user.Id, type, date);
-        return allOperations.Take(5).ToList();
+        await UpdateAsync(operation);
+        var difference = oldPrice - operation.Price;
+        user.Balance += difference;
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task<OperationDal> GetOperation(Guid id)
+    {
+        var operation = await GetAsync(id);
+        return operation;
+    }
+
+    public async Task<int?> GetSumByCategoryAsync(string token, Guid categoryId, DateTime dateTime)
+    {
+        var user = await FindUser(token);
+        var operations =
+            await _operationRepository.GetAllOperationByCategoryAsync(user.Id, categoryId, dateTime);
+        var sum = operations.Select(x => x.Price).Sum();
+        return sum;
+    }
+    
+    public async Task<int?> GetSumByTypeAsync(string token, string type, DateTime dateTime)
+    {
+        var user = await FindUser(token);
+        var operations = await _operationRepository.GetAllOperationByTypeAsync(user.Id, type, dateTime);
+        var sum = operations.Select(x => x.Price).Sum();
+        return sum;
     }
 
     public async Task<string> GetNameCategory(Guid operationId)
     {
         return await _operationRepository.GetNameCategoryAsync(operationId);
-    }
-    
-    public async Task<string> GetNameCategoryByCategoryId(Guid categoryId)
-    {
-        var category = await _categoriesRepository.GetAsync(categoryId);
-        return category.Name;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Logic.Managers.User.Interface;
+﻿
+
+namespace Logic.Managers.User.Interface;
 
 public interface IUserManager
 {

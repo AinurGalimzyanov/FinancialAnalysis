@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Operation.Dto.request;
+namespace Api.Controllers.Public.Operation.Dto.request;
 
-public class SumByTypeCategoryModelRequest
+public class SumByCategoryModelRequest
 {
     [Required]
     [JsonProperty("CategoryId")]

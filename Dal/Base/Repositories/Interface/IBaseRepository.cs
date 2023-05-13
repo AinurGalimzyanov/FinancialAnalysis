@@ -6,7 +6,7 @@ public interface IBaseRepository<T, TI> where T : BaseDal<TI>
 {
     public Task<TI> InsertAsync(T dal);
     
-    public void DeleteAsync(TI id);
+    public Task DeleteAsync(TI id);
     
     public Task<T?> GetAsync(TI id);
     

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Operation.Dto.request;
+namespace Api.Controllers.Public.Operation.Dto.request;
 
 public class UpdateOperationModelRequest
 {
@@ -16,4 +16,8 @@ public class UpdateOperationModelRequest
     [Required]
     [JsonProperty("DateTime")]
     public required DateTime DateTime { get; init; }
+    
+    [Required]
+    [JsonProperty("OldPrice")]
+    public required int OldPrice { get; init; }
 }

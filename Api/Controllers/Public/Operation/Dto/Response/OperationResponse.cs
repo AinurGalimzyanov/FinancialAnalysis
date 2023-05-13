@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Operation.Dto.response;
+namespace Logic.Managers.Operation.Dto.Response;
 
-public class GetOperationModelResponse
+public class OperationResponse
 {
     [Required]
     [JsonProperty("Id")]
@@ -18,15 +18,14 @@ public class GetOperationModelResponse
     public DateTime? DateTime { get; init; }
     
     [Required]
-    [JsonProperty("Name")]
-    public string? Name { get; init; }
+    [JsonProperty("NameCategory")]
+    public string? NameCategory { get; init; }
 
-
-    public GetOperationModelResponse(Guid id, int? price, DateTime? dateTime, string? name)
+    public OperationResponse(Guid id, int? price, DateTime? dateTime, string? nameCategory)
     {
         Id = id;
         Price = price;
         DateTime = dateTime;
-        Name = name;
+        NameCategory = nameCategory;
     }
 }

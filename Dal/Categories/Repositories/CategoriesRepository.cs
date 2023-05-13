@@ -15,12 +15,12 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
     {
         _context = context;
     }
-
+    
     public async Task<List<CategoriesDal>> GetAllUserCategory(string userId, string type)
     {
         var categories = await _context
             .Set<CategoriesDal>()
-            .Where(x => x.UserDal.Id == userId && x.Type == type)
+            .Where(x => (x.UserDal.Id == userId || x.UserDal == null) && x.Type == type)
             .ToListAsync();
         return categories;
     }

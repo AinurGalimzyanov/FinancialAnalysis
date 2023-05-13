@@ -1,4 +1,5 @@
 ﻿using Dal.Base.Repositories;
+using Dal.Categories.Entity;
 using Dal.Operation.Entity;
 using Dal.Operation.Repositories.Interface;
 using Dal.User.Entity;
@@ -14,13 +15,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
         _context = context;
     }
 
-    private bool EqualsDate(string dateNow, string dateOperation)
-    {
-        return dateNow.Take(1).ToString() == dateOperation.Take(1).ToString();
-    }
-
-
-    public async Task<List<OperationDal>> GetAllOperationByCategoryAsync(string userId, Guid categoryId, DateTime date)
+    public async Task<List<OperationDal>> GetAllOperationByCategoryAsync(string userId, Guid? categoryId, DateTime date)
     {
         var operations = await _context
             .Set<OperationDal>()
@@ -57,11 +52,24 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
     {
         var dal = await _context
             .Set<OperationDal>()
+            .Where(x => x.Id == operationId)
             .Include(x => x.CategoriesDal)
-            .FirstOrDefaultAsync(x => x.Id == operationId);
+            .Select(x => x.CategoriesDal)
+            .FirstOrDefaultAsync();
 
-        return dal.CategoriesDal.Name;
+        return dal.Name;
+    }
 
+    public async Task<CategoriesDal> GetOperationCategory(Guid operationId)
+    {
+        var category = await _context
+            .Set<OperationDal>()
+            .Where(x => x.Id == operationId)
+            .Include(x => x.CategoriesDal)
+            .Select(x => x.CategoriesDal)
+            .FirstOrDefaultAsync();
+
+        return category;
     }
 }
 

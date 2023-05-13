@@ -18,9 +18,9 @@ public class BaseManager<T, TI> : IBaseManager<T, TI> where T : BaseDal<TI>
         return await Repository.InsertAsync(dal);
     }
 
-    public void DeleteAsync(TI id)
+    public async Task DeleteAsync(TI id)
     { 
-        Repository.DeleteAsync(id);
+        await Repository.DeleteAsync(id);
     }
 
     public async Task<T?> GetAsync(TI id)

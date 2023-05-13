@@ -1,8 +1,8 @@
 using System.Text;
 using Api;
-using Api.Controllers.Operation.Mapping;
 using Api.Controllers.Public.Auth.Mapping;
 using Api.Controllers.Public.Categories.Mapping;
+using Api.Controllers.Public.Operation.Mapping;
 using AutoMapper;
 using Dal;
 using Dal.Categories.Repositories;
@@ -93,10 +93,10 @@ builder.Services.AddScoped<IOperationManager, OperationManager>();
 // Маппинг 
 builder.Services.AddAutoMapper(typeof(AccountMappingProfile));
 builder.Services.AddAutoMapper(typeof(CreateCategoriesProfile));
-builder.Services.AddAutoMapper(typeof(GetCategoryRequestProfile));
 builder.Services.AddAutoMapper(typeof(UpdateCategoryProfile));
 builder.Services.AddAutoMapper(typeof(CreateOperationProfile));
 builder.Services.AddAutoMapper(typeof(UpdateOperationProfile));
+builder.Services.AddAutoMapper(typeof(OperationResponseProfile));
 
 
 builder.Services.AddCors();

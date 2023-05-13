@@ -1,9 +1,8 @@
-﻿using Api.Controllers.Operation.Dto.request;
-using Api.Controllers.Operation.Dto.response;
+﻿using Api.Controllers.Public.Operation.Dto.request;
 using AutoMapper;
 using Dal.Operation.Entity;
 
-namespace Api.Controllers.Operation.Mapping;
+namespace Api.Controllers.Public.Operation.Mapping;
 
 public class CreateOperationProfile : Profile
 {

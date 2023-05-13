@@ -6,6 +6,7 @@ using Api.Controllers.Public.Auth.Dto.Response;
 using Api.Controllers.Public.Base;
 using AutoMapper;
 using Dal.User.Entity;
+using Logic.Managers.User.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,6 @@ public class AuthorizeController : BasePublicController
     {
         var user = _mapper.Map<UserDal>(model);
         var result = await _userManager.CreateAsync(user, model.Password);
-
         if (result.Succeeded)
         {
             var claims = new List<Claim>()
@@ -61,7 +61,7 @@ public class AuthorizeController : BasePublicController
 
         return BadRequest();
     }
-    
+
     private async Task<UserDal> FindUserByToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
@@ -152,11 +152,13 @@ public class AuthorizeController : BasePublicController
     public async Task<IActionResult> SignOut()
     {
         await _signInManager.SignOutAsync();
+        HttpContext.Response.Cookies.Delete(".AspNetCore.Application.RefreshToken");
+        HttpContext.Response.Headers.Remove("Authorization");
         return Ok();
     }
     
-    [HttpPut("recoverPassword")]
-    public async Task<IActionResult> RecoverPassword([FromBody] RecoverPasswordModelRequest model)
+    [HttpPatch("recoverPassword")]
+    public async Task<IActionResult> RecoverPassword([FromQuery] RecoverPasswordModelRequest model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
         var newPassword = Guid.NewGuid().ToString();
@@ -166,7 +168,7 @@ public class AuthorizeController : BasePublicController
         return Ok();
     }
 
-    [HttpPost("refreshAccessToken")]
+    [HttpPatch("refreshAccessToken")]
     public async Task<IActionResult> RefreshToken()
     {
         var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
@@ -187,9 +189,17 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
 
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteUser()
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        var user = await FindUserByToken(token);
+        await _userManager.DeleteAsync(user);
+        return Ok();
+    }
 
     [HttpPut("updateUser")]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserModelRequest model)
+    public async Task<IActionResult> UpdateUser([FromQuery] UpdateUserModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         var user = await FindUserByToken(token);

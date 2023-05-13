@@ -26,10 +26,29 @@ public class DataContext : IdentityDbContext<UserDal>
     }
     
     
+    
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
+        builder.Entity<CategoriesDal>().HasData(
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Образование", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Связь", Type = "expenses"},
+            
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Аванс", Type = "income"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Зарплата", Type = "income"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Больничные", Type = "income"},
+            new CategoriesDal(){Id = Guid.NewGuid(), Name = "Премния", Type = "income"}
+        );
         builder.Entity<UserDal>(entity => entity.ToTable(name: "Users"));
         builder.Entity<IdentityRole>(entity => entity.ToTable(name: "Roles"));
         builder.Entity<IdentityUserRole<string>>(entity =>
@@ -46,7 +65,9 @@ public class DataContext : IdentityDbContext<UserDal>
         builder.ApplyConfiguration(new AuthConfiguration());
         
         builder.Entity<EmailDal>().HasIndex(u => u.Email).IsUnique();
-
+        /*builder.Entity<UserDal>().HasMany<CategoriesDal>().WithOne(x => x.UserDal).OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<UserDal>().HasMany<OperationDal>().WithOne(x => x.UserDal).OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<CategoriesDal>().HasMany<OperationDal>().WithOne(x => x.CategoriesDal).OnDelete(DeleteBehavior.Cascade);*/
         builder.Entity<UserDal>().Property(u => u.Balance).IsRequired(false);
         builder.Entity<CategoriesDal>().Property(u => u.Name).IsRequired(false);
         builder.Entity<OperationDal>().Property(u => u.DateTime);

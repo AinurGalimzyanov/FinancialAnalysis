@@ -1,5 +1,7 @@
-﻿using Dal.User.Entity;
+﻿using Dal.Categories.Entity;
+using Dal.User.Entity;
 using Dal.User.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dal.User.Repositories;
 
@@ -11,7 +13,8 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
-    
+
+
     public List<UserDal> GetAll() =>  _context.Set<UserDal>().ToList();
     
     public async Task<UserDal?> GetByIdAsync(Guid id) => await _context.Set<UserDal>().FindAsync(id);

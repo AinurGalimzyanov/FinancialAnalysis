@@ -10,7 +10,7 @@ public class EmailRepository : IEmailRepository
         throw new NotImplementedException();
     }
 
-    public void DeleteAsync(Guid id)
+    public Task DeleteAsync(Guid id)
     {
         throw new NotImplementedException();
     }

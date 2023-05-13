@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Operation.Dto.response;
+namespace Logic.Managers.Operation.Dto.Response;
 
-public class GetBalanceModelResponse
+public class BalanceResponse
 {
     [Required]
     [JsonProperty("Balance")]
     public int? Balance { get; init; }
 
-    public GetBalanceModelResponse(int? balance)
+    public BalanceResponse(int? balance)
     {
         Balance = balance;
     }

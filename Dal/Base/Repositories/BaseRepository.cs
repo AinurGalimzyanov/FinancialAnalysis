@@ -22,7 +22,7 @@ public class BaseRepository<T, TI> : IBaseRepository<T, TI> where T : BaseDal<TI
         return entity.Entity.Id;
     }
 
-    public async void DeleteAsync(TI id)
+    public async Task DeleteAsync(TI id)
     {
         var entity = await _dbSet.FindAsync(id);
         if (entity != null)
