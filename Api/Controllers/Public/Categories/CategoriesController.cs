@@ -1,4 +1,5 @@
 ﻿
+using System.IdentityModel.Tokens.Jwt;
 using Api.Controllers.Public.Base;
 using Api.Controllers.Public.Categories.Dto.Request;
 using Api.Controllers.Public.Categories.Dto.Response;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers.Public.Categories;
 
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CategoriesController : BasePublicController
 {
     private readonly IMapper _mapper;
@@ -28,18 +30,17 @@ public class CategoriesController : BasePublicController
     }
 
     [HttpPost("create")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoriesModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var newCategory = _mapper.Map<CategoriesDal>(model);
         var sum = await _categoriesManager.CreateCategories(token, newCategory);
         return Ok(new CategoryResponse(newCategory.Name, newCategory.Id, newCategory.Type, sum));
     }
     
     [HttpPut("update")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> UpdateCategory([FromQuery] UpdateCategoryModelRequest model)
+    public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryModelRequest model)
     {
         var newCategory = _mapper.Map<CategoriesDal>(model);
         await _categoriesManager.UpdateAsync(newCategory);
@@ -47,7 +48,6 @@ public class CategoriesController : BasePublicController
     }
     
     [HttpDelete("delete/{id}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     { 
         await _categoriesManager.DeleteAsync(id);
@@ -55,10 +55,10 @@ public class CategoriesController : BasePublicController
     }
 
     [HttpGet("allCategories")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetAllCategories()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var categories = await _categoriesManager.GetAllCategoriesByType(token);
         var responsesIncome = new List<CategoryResponse>();
         var responsesExpenses = new List<CategoryResponse>();
@@ -74,11 +74,17 @@ public class CategoriesController : BasePublicController
     }
 
     [HttpGet("getCategory/{id}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)
     {
         var sum = await _categoriesManager.GetSumCategory(id);
         var category = await _categoriesManager.GetAsync(id);
         return Ok(new CategoryResponse(category.Name, category.Id, category.Type, sum));
+    }
+    
+    private bool CheckNotValidAccess(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+        return jwt.ValidTo < DateTime.UtcNow;
     }
 }

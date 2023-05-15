@@ -1,4 +1,5 @@
-﻿using Api.Controllers.Public.Base;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Api.Controllers.Public.Base;
 using Api.Controllers.Public.Operation.Dto.request;
 using AutoMapper;
 using Dal.Operation.Entity;
@@ -26,6 +27,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> CreateOperation([FromBody] CreateOperationModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var operation = _mapper.Map<OperationDal>(model);
         await _operationManager.CreateOperation(token,  operation, model.CategoryId);
         var categoryName = await _operationManager.GetNameCategory(operation.Id);
@@ -33,9 +35,10 @@ public class OperationController : BasePublicController
     }
     
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateOperation([FromQuery] UpdateOperationModelRequest model)
+    public async Task<IActionResult> UpdateOperation([FromBody] UpdateOperationModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var operation = _mapper.Map<OperationDal>(model);
         await _operationManager.UpdateOperation(token, operation, model.OldPrice);
         var categoryName = await _operationManager.GetNameCategory(operation.Id);
@@ -46,6 +49,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> DeleteOperation([FromRoute] Guid id)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         await _operationManager.DeleteOperation(id, token);
         return Ok();
     }
@@ -62,6 +66,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetAllOperations([FromQuery] AllOperationModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var operations =  await _operationManager.GetAllOperations(token, model.DateTime);
         var result = new List<OperationResponse>();
         foreach (var operation in operations.Skip(model.Quantity == 0 ? 0 : operations.Count - model.Quantity))
@@ -76,6 +81,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetOperationByCategory([FromQuery] OperationsByCategoryModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var operations = await _operationManager.GetOperationsByCategoryAsync(token, model.CategoryId, model.DateTime);
         var result = new List<OperationResponse>();
         foreach (var operation in operations.Skip(model.Quantity == 0 ? 0 : operations.Count - model.Quantity))
@@ -90,6 +96,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetOperationsByType([FromQuery] AllOperationModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var operations = await _operationManager.GetOperationsByTypeAsync(token, model.DateTime);
         
         var responsesIncome = new List<OperationResponse>();
@@ -113,6 +120,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetSumByCategory([FromQuery] SumByCategoryModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var sum = await _operationManager.GetSumByCategoryAsync(token, model.CategoryId, model.DateTime);
         return sum != null ? Ok(new SumResponse(sum)) : BadRequest();
     }
@@ -121,6 +129,7 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetSumByType([FromQuery] SumByTypeModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var sum = await _operationManager.GetSumByTypeAsync(token, model.Type, model.DateTime);
         return sum != null ? Ok(new SumResponse(sum)) : BadRequest();
     }
@@ -129,15 +138,24 @@ public class OperationController : BasePublicController
     public async Task<IActionResult> GetBalance()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var balance = await _operationManager.GetBalanceAsync(token);
         return balance != null ? Ok(new BalanceResponse(balance)) : BadRequest();
     }
 
-    [HttpPatch("createBalance/{newBalance}")]
-    public async Task<IActionResult> CreateBalance([FromRoute] int newBalance)
+    [HttpPatch("createBalance")]
+    public async Task<IActionResult> CreateBalance([FromBody] int newBalance)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         await _operationManager.CreateBalanceAsync(token, newBalance);
         return Ok();
+    }
+    
+    private bool CheckNotValidAccess(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+        return jwt.ValidTo < DateTime.UtcNow;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
+using System.Xml.Linq;
 using Api.Controllers.Public.Auth.Dto.Request;
 using Api.Controllers.Public.Auth.Dto.Response;
 using Api.Controllers.Public.Base;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
+using Extensions = Newtonsoft.Json.Linq.Extensions;
 
 namespace Api.Controllers.Public.Auth;
 
@@ -62,11 +65,17 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
 
+    private bool CheckNotValidAccess(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+        return jwt.ValidTo < DateTime.UtcNow;
+    }
+
     private async Task<UserDal> FindUserByToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
-        if (jwt.ValidTo < DateTime.UtcNow) return null;
         var email = jwt.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
         return await _userManager.FindByEmailAsync(email);;
     }
@@ -136,8 +145,8 @@ public class AuthorizeController : BasePublicController
     public async Task<IActionResult> SignInWithAccess()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
-        
         if (user != null ) //&& user.CheckExistenceMail
         {
             var claims = await _userManager.GetClaimsAsync(user);
@@ -158,7 +167,7 @@ public class AuthorizeController : BasePublicController
     }
     
     [HttpPatch("recoverPassword")]
-    public async Task<IActionResult> RecoverPassword([FromQuery] RecoverPasswordModelRequest model)
+    public async Task<IActionResult> RecoverPassword([FromBody] RecoverPasswordModelRequest model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
         var newPassword = Guid.NewGuid().ToString();
@@ -173,7 +182,6 @@ public class AuthorizeController : BasePublicController
     {
         var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
         var user = await FindUserByToken(refreshToken);
-        
         if(user != null || user.RefreshToken == refreshToken)
         {
             var claims = await _userManager.GetClaimsAsync(user);
@@ -193,15 +201,17 @@ public class AuthorizeController : BasePublicController
     public async Task<IActionResult> DeleteUser()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
         await _userManager.DeleteAsync(user);
         return Ok();
     }
 
     [HttpPut("updateUser")]
-    public async Task<IActionResult> UpdateUser([FromQuery] UpdateUserModelRequest model)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
         if (user != null)
         {
