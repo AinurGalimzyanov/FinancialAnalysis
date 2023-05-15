@@ -144,11 +144,11 @@ public class OperationController : BasePublicController
     }
 
     [HttpPatch("createBalance")]
-    public async Task<IActionResult> CreateBalance([FromBody] int newBalance)
+    public async Task<IActionResult> CreateBalance([FromBody] CreateBalanceModelRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
-        await _operationManager.CreateBalanceAsync(token, newBalance);
+        await _operationManager.CreateBalanceAsync(token, model.NewBalance);
         return Ok();
     }
     
