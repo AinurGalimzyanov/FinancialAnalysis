@@ -15,9 +15,4 @@ public class SignInModelRequest
     [DataType(DataType.Password)]
     [JsonProperty("Password")]
     public required string Password { get; init; }
-
-    [Required]
-    [DefaultValue(false)]
-    [JsonProperty("RememberMe")]
-    public required bool RememberMe { get; init; }
 }

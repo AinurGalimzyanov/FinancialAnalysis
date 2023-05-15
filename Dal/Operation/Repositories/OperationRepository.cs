@@ -21,7 +21,8 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Set<OperationDal>()
             .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
             .Where(x => x.DateTime.Value.Year == date.Year &&
-                        x.DateTime.Value.Month == date.Month)
+                        x.DateTime.Value.Month == date.Month && x.DateTime.Value.Day == date.Day)
+            .OrderByDescending(x => x.DateTime)
             .ToListAsync();
         return operations;
     }
@@ -32,7 +33,8 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Set<OperationDal>()
             .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Type == type )
             .Where(x => x.DateTime.Value.Year == date.Year &&
-                        x.DateTime.Value.Month == date.Month)
+                        x.DateTime.Value.Month == date.Month && x.DateTime.Value.Day == date.Day)
+            .OrderByDescending(x => x.DateTime)
             .ToListAsync();
         return operations;
     }
@@ -43,7 +45,8 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Set<OperationDal>()
             .Where(x => x.UserDal.Id == userId)
             .Where(x => x.DateTime.Value.Year == date.Year &&
-                        x.DateTime.Value.Month == date.Month)
+                        x.DateTime.Value.Month == date.Month && x.DateTime.Value.Day == date.Day)
+            .OrderByDescending(x => x.DateTime)
             .ToListAsync();
         return operations;
     }

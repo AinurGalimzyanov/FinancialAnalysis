@@ -1,26 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Api.Controllers.Public.Auth.Dto.Request;
 
 public class UpdateUserModelRequest
 {
-    [Required]
     [JsonProperty("Name")]
-    public required string Name { get; init; }
-    
-    [Required]
+    [DefaultValue(null)]
+    public string? Name { get; init; }
+
     [EmailAddress]
+    [DefaultValue(null)]
     [JsonProperty("Email")]
-    public required string Email { get; init; }
-    
-    [Required]
+    public string? Email { get; init; } 
+
+    [DefaultValue(null)]
     [DataType(DataType.Password)]
-    [JsonProperty("CurrentPassword")]
-    public required string CurrentPassword { get; init; }
-    
-    [Required]
-    [DataType(DataType.Password)]
-    [JsonProperty("NewPassword")]
-    public required string NewPassword { get; init; }
+    [JsonProperty("Password")]
+    public string? Password { get; init; }
 }

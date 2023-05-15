@@ -164,7 +164,7 @@ public class AuthorizeController : BasePublicController
         var newPassword = Guid.NewGuid().ToString();
         await _userManager.RemovePasswordAsync(user);
         await _userManager.AddPasswordAsync(user, newPassword);
-        EmailSender.SendEmail($"Новый пароль : {newPassword}", "vladimir.tereshin@urfu.me");
+        EmailSender.SendEmail($"Новый пароль : {newPassword}", "aricsybsn@gmail.com");
         return Ok();
     }
 
@@ -205,10 +205,14 @@ public class AuthorizeController : BasePublicController
         var user = await FindUserByToken(token);
         if (user != null)
         {
-            user.Name = model.Name;
-            user.Email = model.Email;
-            user.UserName = model.Email;
-            await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            user.Name = model.Name != null ? model.Name : user.Name;
+            user.Email = model.Email != null ? model.Email : user.Email;
+            user.UserName = model.Email != null ? model.Email : user.Email;
+            if (model.Password != null)
+            {
+                await _userManager.RemovePasswordAsync(user);
+                await _userManager.AddPasswordAsync(user, model.Password);
+            }
             var result = await _userManager.UpdateAsync(user);
             if(result.Succeeded)
             {

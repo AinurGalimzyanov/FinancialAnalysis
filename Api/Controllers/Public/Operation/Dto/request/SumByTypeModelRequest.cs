@@ -11,7 +11,6 @@ public class SumByTypeModelRequest
     public required DateTime DateTime { get; init; }
     
     [Required]
-    [DefaultValue(null)]
     [JsonProperty("Type")]
     public required string Type { get; init; }
 }
