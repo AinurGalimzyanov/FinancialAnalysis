@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Api.Controllers.Public.Operation.Dto.Response;
+namespace Api.Controllers.Public.Categories.Dto.Response;
 
 public class OperationResponse
 {
@@ -16,16 +16,11 @@ public class OperationResponse
     [Required]
     [JsonProperty("DateTime")]
     public DateTime? DateTime { get; init; }
-    
-    [Required]
-    [JsonProperty("NameCategory")]
-    public string? NameCategory { get; init; }
 
-    public OperationResponse(Guid id, int? price, DateTime? dateTime, string? nameCategory)
+    public OperationResponse(Guid id, int? price, DateTime? dateTime)
     {
         Id = id;
         Price = price;
         DateTime = dateTime;
-        NameCategory = nameCategory;
     }
 }

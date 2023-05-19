@@ -22,7 +22,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Id == categoryId)
             .Where(x => x.DateTime.Value.Year == date.Year &&
                         x.DateTime.Value.Month == date.Month)
-            .OrderByDescending(x => x.DateTime)
+            .OrderBy(x => x.DateTime)
             .ToListAsync();
         return operations;
     }
@@ -34,7 +34,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Type == type )
             .Where(x => x.DateTime.Value.Year == date.Year &&
                         x.DateTime.Value.Month == date.Month)
-            .OrderByDescending(x => x.DateTime)
+            .OrderBy(x => x.DateTime)
             .ToListAsync();
         return operations;
     }
@@ -46,7 +46,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .Where(x => x.UserDal.Id == userId)
             .Where(x => x.DateTime.Value.Year == date.Year &&
                         x.DateTime.Value.Month == date.Month)
-            .OrderByDescending(x => x.DateTime)
+            .OrderBy(x => x.DateTime)
             .ToListAsync();
         return operations;
     }
@@ -74,5 +74,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
 
         return category;
     }
+
+    
 }
 

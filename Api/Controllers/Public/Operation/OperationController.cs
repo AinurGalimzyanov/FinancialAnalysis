@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Api.Controllers.Public.Base;
 using Api.Controllers.Public.Operation.Dto.request;
+using Api.Controllers.Public.Operation.Dto.Response;
 using AutoMapper;
 using Dal.Operation.Entity;
-using Logic.Managers.Operation.Dto.Response;
 using Logic.Managers.Operation.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -68,6 +68,24 @@ public class OperationController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var operations =  await _operationManager.GetAllOperations(token, model.DateTime);
+        if (operations.Count - model.Count * model.Page < -model.Count) return BadRequest();
+        var result = new List<OperationResponse>();
+        var skipValue = model.Count == 0 ? 0 : operations.Count - model.Count * model.Page;
+        var takeValue = model.Count == 0 ? operations.Count : (skipValue > -model.Count && skipValue < 0) ? operations.Count - model.Count * (model.Page - 1) : model.Count;
+        foreach (var operation in operations.Skip(skipValue).Take(takeValue))
+        {
+            result.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime, 
+                await  _operationManager.GetNameCategory(operation.Id)));
+        }
+        return result != null ? Ok(new AllOperationResponse(result)) : BadRequest();
+    }
+    
+    [HttpGet("getOperationByAllCategory")]
+    public async Task<IActionResult> GetOperationByAllCategory([FromQuery] OperationsByCategoryModelRequest model)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var operations = await _operationManager.GetOperationsByCategoryAsync(token, model.CategoryId, model.DateTime);
         var result = new List<OperationResponse>();
         foreach (var operation in operations.Skip(model.Quantity == 0 ? 0 : operations.Count - model.Quantity))
         {
@@ -100,14 +118,14 @@ public class OperationController : BasePublicController
         var operations = await _operationManager.GetOperationsByTypeAsync(token, model.DateTime);
         
         var responsesIncome = new List<OperationResponse>();
-        foreach (var operation in operations.Item1.Skip(model.Quantity == 0 ? 0 : operations.Item1.Count - model.Quantity))
+        foreach (var operation in operations.Item1.Skip(model.Count == 0 ? 0 : operations.Item1.Count - model.Count))
         {
             responsesIncome.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime, 
                 await  _operationManager.GetNameCategory(operation.Id)));
         }
         
         var responsesExpenses = new List<OperationResponse>();
-        foreach (var operation in operations.Item2.Skip(model.Quantity == 0 ? 0 : operations.Item2.Count - model.Quantity))
+        foreach (var operation in operations.Item2.Skip(model.Count == 0 ? 0 : operations.Item2.Count - model.Count))
         {
             responsesExpenses.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime, 
                 await  _operationManager.GetNameCategory(operation.Id)));

@@ -248,5 +248,45 @@ public class AuthorizeController : BasePublicController
 
         return BadRequest();
     }
+    
+    [HttpPost("addImgInProfile")]
+    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var user = await FindUserByToken(token);
+        if (uploadedImg != null && user != null)
+        {
+            string path = "/Files/" + uploadedImg.FileName;
+            using (var fileStream = new FileStream(@"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot"
+                + path, FileMode.Create))
+            {
+                await uploadedImg.CopyToAsync(fileStream);
+            }
 
+            user.PathToImg = path;
+            await _userManager.UpdateAsync(user);
+        }
+            
+        return Ok();
+    }
+
+    [HttpPost("getImgInProfile")]
+    public async Task<IActionResult> GetImgInProfile()
+    {
+        var token =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InN0cmluZyIsIm5iZiI6MTY4NDUxMTExNCwiZXhwIjoxNjg0NTEyMDE0LCJpc3MiOiJmYWxzZSIsImF1ZCI6InNkZmYifQ.6zKeLv_OBtDzjm3r0Qo7ezdG_nQ030s4L9OEC_R4m2A";
+        var user = await FindUserByToken(token);
+        if (user != null)
+        {
+            
+            string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot" + user.PathToImg;
+            var type = user.PathToImg.Split('.')[1];
+            var fileType="application/octet-stream";
+            var fileStream = new FileStream(path, FileMode.Open);
+            return File(fileStream, fileType, $"img.{type}");
+        }
+
+        return BadRequest();
+    }
 }

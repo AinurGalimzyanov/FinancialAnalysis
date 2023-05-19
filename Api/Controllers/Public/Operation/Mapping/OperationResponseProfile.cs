@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using Api.Controllers.Public.Operation.Dto.Response;
+using AutoMapper;
 using Dal.Operation.Entity;
-using Logic.Managers.Operation.Dto.Response;
 
 namespace Api.Controllers.Public.Operation.Mapping;
 

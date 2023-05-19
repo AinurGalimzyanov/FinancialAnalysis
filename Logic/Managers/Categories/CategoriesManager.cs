@@ -5,6 +5,7 @@ using Dal.Base.Repositories.Interface;
 using Dal.Categories.Entity;
 using Dal.Categories.Repositories;
 using Dal.Categories.Repositories.Interface;
+using Dal.Operation.Entity;
 using Dal.User.Entity;
 using Logic.Managers.Base;
 using Logic.Managers.Categories.Interface;
@@ -59,4 +60,10 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         return sum;
     }
 
+    public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperations(string token, DateTime from, DateTime to)
+    {
+        var user = await FindUser(token);
+        var list = await _categoriesRepository.GetCategoryWithOperation(user.Id, from, to);
+        return list;
+    }
 }

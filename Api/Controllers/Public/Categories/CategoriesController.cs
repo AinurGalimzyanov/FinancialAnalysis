@@ -72,6 +72,25 @@ public class CategoriesController : BasePublicController
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
+    
+    [HttpGet("getAllCategoryWithOperation")]
+    public async Task<IActionResult> GetAllCategoryWithOperation([FromQuery] DateTimeLimitRequest model)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var categories = await _categoriesManager.GetCategoryWithOperations(token, model.FromDateTime, model.ToDateTime);
+        var result = new List<CategoryResponse>();
+        foreach (var i in categories)
+        {
+            var o = new List<OperationResponse>();
+            foreach (var j in i.Item2)
+            {
+                o.Add(new OperationResponse(j.Id, j.Price, j.DateTime));
+            }
+            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id), o));
+        }
+        return Ok(new AllCategoryWithOperation(result));
+    }
 
     [HttpGet("getCategory/{id}")]
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)

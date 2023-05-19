@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Dal.Operation.Entity;
 using Newtonsoft.Json;
 
 namespace Api.Controllers.Public.Categories.Dto.Response;
@@ -12,20 +13,30 @@ public class CategoryResponse
     [Required] 
     [JsonProperty("Id")] 
     public Guid Id { get; init; }
-    
-    [Required] 
+     
     [JsonProperty("Type")] 
     public string Type { get; init; }
 
     [Required]
     [JsonProperty("Sum")] 
     public int? Sum { get; init; } = 0;
+    
+    [JsonProperty("ListOperation")]
+    public List<OperationResponse> ListOperation { get; set; }
 
     public CategoryResponse(string name, Guid id, string type, int? sum)
     {
         Name = name;
         Id = id;
         Type = type;
+        Sum = sum;
+    }
+    
+    public CategoryResponse(string name, Guid id, int? sum, List<OperationResponse> operationDals)
+    {
+        Name = name;
+        Id = id;
+        ListOperation = operationDals;
         Sum = sum;
     }
 }

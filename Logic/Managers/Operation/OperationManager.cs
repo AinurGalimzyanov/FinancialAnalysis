@@ -165,4 +165,5 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     {
         return await _operationRepository.GetNameCategoryAsync(operationId);
     }
+    
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Logic.Managers.Operation.Dto.Response;
+namespace Api.Controllers.Public.Operation.Dto.Response;
 
 public class OperationsByCategoryResponse
 {

@@ -4,6 +4,7 @@ using Dal.Categories.Repositories.Interface;
 using Dal.Operation.Entity;
 using Dal.User.Entity;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.X9;
 
 namespace Dal.Categories.Repositories;
 
@@ -33,5 +34,17 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
             .SelectMany(x => x.OperationList)
             .Select(x => x.Price)
             .SumAsync();
+    }
+    
+    public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperation(string userId, DateTime from, DateTime to)
+    {
+        var c = await _context.Set<CategoriesDal>()
+            .Where(x => x.UserDal.Id == userId || x.UserDal == null)
+            .Include(x => x.OperationList
+                .Where(y => from <= y.DateTime.Value && y.DateTime.Value >= to))
+            .Select(x => new Tuple<CategoriesDal, List<OperationDal>>(x, x.OperationList))
+            .ToListAsync();
+
+        return c;
     }
 }
