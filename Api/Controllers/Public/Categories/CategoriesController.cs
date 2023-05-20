@@ -1,5 +1,6 @@
 ﻿
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Api.Controllers.Public.Base;
 using Api.Controllers.Public.Categories.Dto.Request;
 using Api.Controllers.Public.Categories.Dto.Response;
@@ -105,5 +106,14 @@ public class CategoriesController : BasePublicController
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
         return jwt.ValidTo < DateTime.UtcNow;
+    }
+    
+    [HttpGet("getPictureForCategories/{img}")]
+    public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
+    {
+        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories" + img;
+        var fileType="application/octet-stream";
+        var fileStream = new FileStream(path, FileMode.Open);
+        return File(fileStream, fileType, $"{img}");
     }
 }
