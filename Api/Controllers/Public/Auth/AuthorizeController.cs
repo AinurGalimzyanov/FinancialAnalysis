@@ -250,9 +250,9 @@ public class AuthorizeController : BasePublicController
     }
     
     [HttpPost("addImgInProfile")]
-    public async Task<IActionResult> AddImgInProfile([FromBody] IFormFile uploadedImg)
+    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg)
     {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        var token =  HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
         if (uploadedImg != null && user != null)
