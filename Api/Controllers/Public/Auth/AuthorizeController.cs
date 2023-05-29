@@ -9,6 +9,7 @@ using Api.Controllers.Public.Base;
 using AutoMapper;
 using Dal.User.Entity;
 using Logic.Managers.User.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -249,6 +250,7 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("addImgInProfile")]
     public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg)
     {
@@ -257,7 +259,8 @@ public class AuthorizeController : BasePublicController
         var user = await FindUserByToken(token);
         if (uploadedImg != null && user != null)
         {
-            string path = "/ImgInProfile/" + uploadedImg.FileName;
+            var type = uploadedImg.FileName.Split('.')[1]; 
+            string path = $"/ImgInProfile/{user.Id}.{type}";
             using (var fileStream = new FileStream(@"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot"
                 + path, FileMode.Create))
             {
@@ -267,10 +270,11 @@ public class AuthorizeController : BasePublicController
             user.PathToImg = path;
             await _userManager.UpdateAsync(user);
         }
-            
-        return Ok();
+        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile");
+        return Ok(uri);
     }
-
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getImgInProfile")]
     public async Task<IActionResult> GetImgInProfile()
     {
@@ -289,6 +293,7 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpDelete("deleteImg")]
     public async Task<IActionResult> DeleteImg()
     {

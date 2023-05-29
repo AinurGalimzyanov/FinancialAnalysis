@@ -26,12 +26,13 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
         return categories;
     }
 
-    public async Task<int?> GetSumCategory(Guid catId)
+    public async Task<int?> GetSumCategory(Guid catId, string userId)
     {
         return  await _context.Set<CategoriesDal>()
             .Where(x => x.Id == catId)
             .Include(x => x.OperationList)
             .SelectMany(x => x.OperationList)
+            .Where(x => x.UserDal.Id == userId)
             .Select(x => x.Price)
             .SumAsync();
     }

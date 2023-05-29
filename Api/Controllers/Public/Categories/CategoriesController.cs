@@ -65,11 +65,11 @@ public class CategoriesController : BasePublicController
         var responsesExpenses = new List<CategoryResponse>();
         foreach (var dal in categories.Item1)
         {
-            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id)));
+            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token)));
         }
         foreach (var dal in categories.Item2)
         {
-            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id)));
+            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token)));
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
@@ -88,7 +88,7 @@ public class CategoriesController : BasePublicController
             {
                 o.Add(new OperationResponse(j.Id, j.Price, j.DateTime));
             }
-            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id), o));
+            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), o));
         }
         return Ok(new AllCategoryWithOperation(result));
     }
@@ -96,7 +96,8 @@ public class CategoriesController : BasePublicController
     [HttpGet("getCategory/{id}")]
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)
     {
-        var sum = await _categoriesManager.GetSumCategory(id);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        var sum = await _categoriesManager.GetSumCategory(id, token);
         var category = await _categoriesManager.GetAsync(id);
         return Ok(new CategoryResponse(category.Name, category.Id, category.Type, sum));
     }
@@ -108,12 +109,24 @@ public class CategoriesController : BasePublicController
         return jwt.ValidTo < DateTime.UtcNow;
     }
     
-    [HttpGet("getPictureForCategories/{img}")]
+    /*[HttpGet("getPictureForCategories/{img}")]
     public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
     {
         string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
         return File(fileStream, fileType, $"{img}");
-    }
+    }*/
+    
+
+    /*[HttpGet("getPicturesForCategories")]
+    public async Task<IActionResult> GetPicturesForCategories()
+    {
+        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories";
+        var fileType="application/octet-stream";
+        var fileStream = new FileStream(path, FileMode.Open);
+        var responses = Directory.GetFiles(path).Select(x => new PictureModelResponse(System.IO.File(fileStream, fileType, path + x))).ToList();
+        return Ok(new PicturesModelResponse(responses));
+    }*/
+    
 }

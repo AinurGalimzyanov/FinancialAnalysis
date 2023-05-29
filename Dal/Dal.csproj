@@ -37,7 +37,6 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\ImgInProfile\" />
-      <Folder Include="wwwroot\PictureForCategories\" />
     </ItemGroup>
 
 </Project>

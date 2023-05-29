@@ -37,7 +37,7 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
     public async Task<int?> CreateCategories(string token, CategoriesDal dal)
     {
         var user = await FindUser(token);
-        var sum = await _categoriesRepository.GetSumCategory(dal.Id);
+        var sum = await _categoriesRepository.GetSumCategory(dal.Id, user.Id);
         dal.UserDal = user;
         await Repository.InsertAsync(dal);
         return sum;
@@ -53,10 +53,11 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         return new(listIncome, listExpenses);
     }
 
-    public async Task<int?> GetSumCategory(Guid categoryId)
+    public async Task<int?> GetSumCategory(Guid categoryId, string token)
     {
+        var user = await FindUser(token);
         var category = await GetAsync(categoryId);
-        var sum = await _categoriesRepository.GetSumCategory(categoryId);
+        var sum = await _categoriesRepository.GetSumCategory(categoryId, user.Id);
         return sum;
     }
 

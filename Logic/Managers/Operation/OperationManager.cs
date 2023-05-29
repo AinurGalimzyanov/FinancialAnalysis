@@ -133,7 +133,7 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     {
         var user = await FindUser(token);
         await UpdateAsync(operation);
-        var difference = oldPrice - operation.Price;
+        var difference = operation.Price - oldPrice;
         user.Balance += difference;
         await _userManager.UpdateAsync(user);
     }
