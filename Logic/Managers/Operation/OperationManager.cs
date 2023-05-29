@@ -133,7 +133,19 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     {
         var user = await FindUser(token);
         await UpdateAsync(operation);
-        var difference = operation.Price - oldPrice;
+        var category = await _operationRepository.GetOperationCategory(operation.Id);
+        var difference = 0;
+        
+        if (category.Type == "income")
+        {
+            difference = (int)(operation.Price - oldPrice);
+        }
+
+        if (category.Type == "expenses")
+        {
+            difference = (int)(oldPrice - operation.Price);
+        }
+        
         user.Balance += difference;
         await _userManager.UpdateAsync(user);
     }
