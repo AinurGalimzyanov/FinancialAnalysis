@@ -7,9 +7,9 @@ public class PictureModelResponse
 {
     [Required]
     [JsonProperty("Picture")]
-    public IFormFile Picture { get; init; }
+    public Uri Picture { get; init; }
 
-    public PictureModelResponse(IFormFile picture)
+    public PictureModelResponse(Uri picture)
     {
         Picture = picture;
     }

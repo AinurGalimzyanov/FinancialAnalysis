@@ -109,24 +109,26 @@ public class CategoriesController : BasePublicController
         return jwt.ValidTo < DateTime.UtcNow;
     }
     
-    /*[HttpGet("getPictureForCategories/{img}")]
+    [HttpGet("getPictureForCategories/{img}")]
     public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
     {
-        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories" + img;
+        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories\" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
         return File(fileStream, fileType, $"{img}");
-    }*/
+    }
     
 
-    /*[HttpGet("getPicturesForCategories")]
+    [HttpGet("getUriPicturesForCategories")]
     public async Task<IActionResult> GetPicturesForCategories()
     {
         string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories";
-        var fileType="application/octet-stream";
-        var fileStream = new FileStream(path, FileMode.Open);
-        var responses = Directory.GetFiles(path).Select(x => new PictureModelResponse(System.IO.File(fileStream, fileType, path + x))).ToList();
+        var responses = Directory
+            .GetFiles(path)
+            .Select(x => new PictureModelResponse(new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))
+            .ToList();
         return Ok(new PicturesModelResponse(responses));
-    }*/
+    }
     
+   
 }
