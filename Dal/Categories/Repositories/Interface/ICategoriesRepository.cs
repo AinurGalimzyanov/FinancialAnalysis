@@ -8,7 +8,7 @@ namespace Dal.Categories.Repositories.Interface;
 public interface ICategoriesRepository : IBaseRepository<CategoriesDal, Guid>
 {
     public Task<List<CategoriesDal>> GetAllUserCategory(string userId, string type);
-    public Task<int?> GetSumCategory(Guid catId);
+    public Task<int?> GetSumCategory(Guid catId, string userId);
 
     public Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperation(string userId, DateTime from, DateTime to);
 
