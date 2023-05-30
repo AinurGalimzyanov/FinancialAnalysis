@@ -37,7 +37,7 @@ public class CategoriesController : BasePublicController
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var newCategory = _mapper.Map<CategoriesDal>(model);
         var sum = await _categoriesManager.CreateCategories(token, newCategory);
-        return Ok(new CategoryResponse(newCategory.Name, newCategory.Id, newCategory.Type, sum));
+        return Ok(new CategoryResponse(newCategory.Name, newCategory.Id, newCategory.Type, sum, newCategory.Img));
     }
     
     [HttpPut("update")]
@@ -65,11 +65,11 @@ public class CategoriesController : BasePublicController
         var responsesExpenses = new List<CategoryResponse>();
         foreach (var dal in categories.Item1)
         {
-            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token)));
+            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token), dal.Img));
         }
         foreach (var dal in categories.Item2)
         {
-            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token)));
+            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token), dal.Img));
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
@@ -88,7 +88,7 @@ public class CategoriesController : BasePublicController
             {
                 o.Add(new OperationResponse(j.Id, j.Price, j.DateTime));
             }
-            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), o));
+            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), o, i.Item1.Img));
         }
         return Ok(new AllCategoryWithOperation(result));
     }
@@ -99,7 +99,7 @@ public class CategoriesController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         var sum = await _categoriesManager.GetSumCategory(id, token);
         var category = await _categoriesManager.GetAsync(id);
-        return Ok(new CategoryResponse(category.Name, category.Id, category.Type, sum));
+        return Ok(new CategoryResponse(category.Name, category.Id, category.Type, sum, category.Img));
     }
     
     private bool CheckNotValidAccess(string token)

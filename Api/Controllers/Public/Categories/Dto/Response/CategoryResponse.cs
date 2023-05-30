@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Dal.Operation.Entity;
 using Newtonsoft.Json;
 
@@ -17,6 +18,10 @@ public class CategoryResponse
     [JsonProperty("Type")] 
     public string Type { get; init; }
 
+    [JsonProperty("Img")] 
+    [DefaultValue(null)]
+    public string? Img { get; init; }
+    
     [Required]
     [JsonProperty("Sum")] 
     public int? Sum { get; init; } = 0;
@@ -24,19 +29,21 @@ public class CategoryResponse
     [JsonProperty("ListOperation")]
     public List<OperationResponse> ListOperation { get; set; }
 
-    public CategoryResponse(string name, Guid id, string type, int? sum)
+    public CategoryResponse(string name, Guid id, string type, int? sum, string? img = null)
     {
         Name = name;
         Id = id;
         Type = type;
         Sum = sum;
+        Img = img;
     }
-    
-    public CategoryResponse(string name, Guid id, int? sum, List<OperationResponse> operationDals)
+
+    public CategoryResponse(string name, Guid id, int? sum, List<OperationResponse> operationDals, string? img = null)
     {
         Name = name;
         Id = id;
         ListOperation = operationDals;
         Sum = sum;
+        Img = img;
     }
 }

@@ -10,6 +10,8 @@ public class CreateCategoriesProfile : Profile
     {
         CreateMap<CreateCategoriesModelRequest, CategoriesDal>()
             .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type));
+            .ForMember(dst => dst.Type, opt => opt.MapFrom(src => src.Type))
+            .ForMember(dst => dst.Img, opt => opt.MapFrom(src => src.Img))
+            ;
     }
 }
