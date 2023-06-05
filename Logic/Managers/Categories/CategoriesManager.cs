@@ -36,24 +36,22 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
     
     public async Task AddStaticCategories(UserDal user)
     {
+        var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
         var listStaticCategories = new List<CategoriesDal>()
         {
-            new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user},
-            new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\1.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\2.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\3.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\4.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\5.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\6.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\7.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\8.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\9.svg"},
+            new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\10.svg"},
+            new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\11.svg"},
 
-            new() { Id = Guid.NewGuid(), Name = "Аванс", Type = "income", UserDal = user },
-            new() { Id = Guid.NewGuid(), Name = "Зарплата", Type = "income", UserDal = user },
-            new() { Id = Guid.NewGuid(), Name = "Больничные", Type = "income", UserDal = user },
-            new() { Id = Guid.NewGuid(), Name = "Премния", Type = "income", UserDal = user }
+            new() { Id = Guid.NewGuid(), Name = "Зарплата", Type = "income", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\Group(13).svg" }
         };
         foreach (var category in listStaticCategories)          
         {

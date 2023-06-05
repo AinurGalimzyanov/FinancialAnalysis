@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers.Public.Categories;
 
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
 public class CategoriesController : BasePublicController
 {
     private readonly IMapper _mapper;
@@ -30,6 +30,7 @@ public class CategoriesController : BasePublicController
         _userManager = userManager;
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("create")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoriesModelRequest model)
     {
@@ -40,6 +41,7 @@ public class CategoriesController : BasePublicController
         return Ok(new CategoryResponse(newCategory.Name, newCategory.Id, newCategory.Type, sum, newCategory.Img));
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryModelRequest model)
     {
@@ -48,6 +50,7 @@ public class CategoriesController : BasePublicController
         return Ok();
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     { 
@@ -55,6 +58,7 @@ public class CategoriesController : BasePublicController
         return Ok();
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("allCategories")]
     public async Task<IActionResult> GetAllCategories()
     {
@@ -74,6 +78,7 @@ public class CategoriesController : BasePublicController
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getAllCategoryWithOperation")]
     public async Task<IActionResult> GetAllCategoryWithOperation([FromQuery] DateTimeLimitRequest model)
     {
@@ -93,6 +98,7 @@ public class CategoriesController : BasePublicController
         return Ok(new AllCategoryWithOperation(result));
     }
 
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getCategory/{id}")]
     public async Task<IActionResult> GetCategory([FromRoute] Guid id)
     {
@@ -119,7 +125,7 @@ public class CategoriesController : BasePublicController
         return File(fileStream, fileType, $"{img}");
     }
     
-
+    
     [HttpGet("getUriPicturesForCategories")]
     public async Task<IActionResult> GetPicturesForCategories()
     {
