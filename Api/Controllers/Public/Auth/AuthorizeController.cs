@@ -253,7 +253,7 @@ public class AuthorizeController : BasePublicController
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("addImgInProfile")]
-    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg, [FromQuery] string id)
+    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
@@ -278,7 +278,7 @@ public class AuthorizeController : BasePublicController
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getImgInProfile")]
-    public async Task<IActionResult> GetImgInProfile([FromQuery] string id)
+    public async Task<IActionResult> GetImgInProfile()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
@@ -297,7 +297,7 @@ public class AuthorizeController : BasePublicController
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpDelete("deleteImg")]
-    public async Task<IActionResult> DeleteImg([FromQuery] string id)
+    public async Task<IActionResult> DeleteImg()
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
