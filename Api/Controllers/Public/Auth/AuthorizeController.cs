@@ -258,10 +258,9 @@ public class AuthorizeController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
-        var uri = new Uri("");
+        var type = uploadedImg.FileName.Split('.')[1];
         if (uploadedImg != null && user != null)
         {
-            var type = uploadedImg.FileName.Split('.')[1];
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
             string path = $"/ImgInProfile/{user.Id}.{type}";
             using (var fileStream = new FileStream($"{p}\\Dal\\wwwroot"
@@ -272,8 +271,8 @@ public class AuthorizeController : BasePublicController
 
             user.PathToImg = path;
             await _userManager.UpdateAsync(user);
-            uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile//ImgInProfile/{user.Id}.{type}");
         }
+        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{user.Id}.{type}");
         return Ok(uri);
     }
     
@@ -281,7 +280,7 @@ public class AuthorizeController : BasePublicController
     public async Task<IActionResult> GetImgInProfile([FromRoute] string img)
     {
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-        string path = $"{p}\\Dal\\wwwroot" + img;
+        string path = $"{p}\\Dal\\wwwroot\\ImgInProfile\\" + img;
         var fileStream = new FileStream(path, FileMode.Open);
         return Ok(fileStream);
     }
