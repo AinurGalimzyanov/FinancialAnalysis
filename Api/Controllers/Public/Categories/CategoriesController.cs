@@ -112,7 +112,8 @@ public class CategoriesController : BasePublicController
     [HttpGet("getPictureForCategories/{img}")]
     public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
     {
-        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories\" + img;
+        var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+        string path = $"{p}\\Dal\\wwwroot\\PictureForCategories\\" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
         return File(fileStream, fileType, $"{img}");
@@ -122,7 +123,8 @@ public class CategoriesController : BasePublicController
     [HttpGet("getUriPicturesForCategories")]
     public async Task<IActionResult> GetPicturesForCategories()
     {
-        string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot\PictureForCategories";
+        var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+        string path = $"{p}\\Dal\\wwwroot\\PictureForCategories";
         var responses = Directory
             .GetFiles(path)
             .Select(x => new PictureModelResponse(new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))

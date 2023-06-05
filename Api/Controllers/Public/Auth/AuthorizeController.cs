@@ -260,9 +260,10 @@ public class AuthorizeController : BasePublicController
         var user = await FindUserByToken(token);
         if (uploadedImg != null && user != null)
         {
-            var type = uploadedImg.FileName.Split('.')[1]; 
+            var type = uploadedImg.FileName.Split('.')[1];
+            var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
             string path = $"/ImgInProfile/{user.Id}.{type}";
-            using (var fileStream = new FileStream(@"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot"
+            using (var fileStream = new FileStream($"{p}\\Dal\\wwwroot"
                 + path, FileMode.Create))
             {
                 await uploadedImg.CopyToAsync(fileStream);
@@ -284,7 +285,8 @@ public class AuthorizeController : BasePublicController
         var user = await FindUserByToken(token);
         if (user != null)
         {
-            string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot" + user.PathToImg;
+            var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+            string path = $"{p}\\Dal\\wwwroot" + user.PathToImg;
             var type = user.PathToImg.Split('.')[1];
             var fileType="application/octet-stream";
             var fileStream = new FileStream(path, FileMode.Open);
@@ -303,7 +305,8 @@ public class AuthorizeController : BasePublicController
         var user = await FindUserByToken(token);
         if (user != null)
         {
-            string path = @"E:\JetBrains Rider 2022.2.2\FinancialAnalysis\Dal\wwwroot" + user.PathToImg;
+            var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+            string path = $"{p}\\Dal\\wwwroot" + user.PathToImg;
             System.IO.File.Delete(path);
             user.PathToImg = null;
             await _userManager.UpdateAsync(user);

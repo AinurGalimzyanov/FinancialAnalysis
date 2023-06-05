@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,14 +103,37 @@ builder.Services.AddAutoMapper(typeof(OperationResponseProfile));
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-/*builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(options =>
 {
-    var basePath = AppContext.BaseDirectory;
+    // Authorization via swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
 
-    var xmlPath = Path.Combine(basePath, "Api.xml");
-    options.IncludeXmlComments(xmlPath);
-});*/
-builder.Services.AddSwaggerGen();
+            },
+            new List<string>()
+        }
+    });
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
