@@ -48,4 +48,13 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
 
         return c;
     }
+
+    public async Task<List<OperationDal>> GetOperations(Guid id)
+    {
+        return await _context.Set<CategoriesDal>()
+            .Include(x => x.OperationList)
+            .SelectMany(x => x.OperationList)
+            .Where(x => x.CategoriesDal.Id == id)
+            .ToListAsync();
+    }
 }

@@ -11,5 +11,6 @@ public interface ICategoriesRepository : IBaseRepository<CategoriesDal, Guid>
     public Task<int?> GetSumCategory(Guid catId, string userId);
 
     public Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperation(string userId, DateTime from, DateTime to);
+    public Task<List<OperationDal>> GetOperations(Guid id);
 
 }

@@ -17,4 +17,6 @@ public interface ICategoriesManager : IBaseManager<CategoriesDal, Guid>
           DateTime from, DateTime to);
 
      public Task AddStaticCategories(UserDal user);
+
+     public Task DeleteCategory(Guid id);
 }

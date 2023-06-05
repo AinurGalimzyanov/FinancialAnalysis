@@ -54,7 +54,7 @@ public class CategoriesController : BasePublicController
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     { 
-        await _categoriesManager.DeleteAsync(id);
+        await _categoriesManager.DeleteCategory(id);
         return Ok();
     }
 

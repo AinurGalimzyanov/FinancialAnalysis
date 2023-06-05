@@ -259,20 +259,23 @@ public class AuthorizeController : BasePublicController
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
         var type = uploadedImg.FileName.Split('.')[1];
+        var guid = Guid.NewGuid();
         if (uploadedImg != null && user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-            string path = $"/ImgInProfile/{user.Id}.{type}";
+            string path = $"/ImgInProfile/{guid}.{type}";
             using (var fileStream = new FileStream($"{p}\\Dal\\wwwroot"
                 + path, FileMode.Create))
             {
                 await uploadedImg.CopyToAsync(fileStream);
             }
 
-            user.PathToImg = $"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{user.Id}.{type}";
+            user.PathToImg = $"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{guid}.{type}";
             await _userManager.UpdateAsync(user);
         }
-        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{user.Id}.{type}");
+
+        
+        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{guid}.{type}");
         return Ok(uri);
     }
     
