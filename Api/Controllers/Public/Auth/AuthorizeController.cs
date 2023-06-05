@@ -276,23 +276,13 @@ public class AuthorizeController : BasePublicController
         return Ok(uri);
     }
     
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("getImgInProfile")]
-    public async Task<IActionResult> GetImgInProfile()
+    [HttpGet("getImgInProfile/{img}")]
+    public async Task<IActionResult> GetImgInProfile([FromRoute] string img)
     {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        if (CheckNotValidAccess(token)) return StatusCode(403);
-        var user = await FindUserByToken(token);
-        if (user != null)
-        {
-            var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-            string path = $"{p}\\Dal\\wwwroot" + user.PathToImg;
-            var fileType="application/octet-stream";
-            var fileStream = new FileStream(path, FileMode.Open);
-            return Ok(fileStream);
-        }
-
-        return BadRequest();
+        var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+        string path = $"{p}\\Dal\\wwwroot" + img;
+        var fileStream = new FileStream(path, FileMode.Open);
+        return Ok(fileStream);
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
