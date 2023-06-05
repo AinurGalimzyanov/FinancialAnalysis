@@ -125,7 +125,7 @@ public class CategoriesController : BasePublicController
         return Ok(fileStream);
     }
     
-    
+    //коммит для егора
     [HttpGet("getUriPicturesForCategories")]
     public async Task<IActionResult> GetPicturesForCategories()
     {
