@@ -220,7 +220,7 @@ public class AuthorizeController : BasePublicController
             user.Name = model.Name != null ? model.Name : user.Name;
             user.Email = model.Email != null ? model.Email : user.Email;
             user.UserName = model.Email != null ? model.Email : user.Email;
-            user.PathToImg = model.Img != null ? model.Img : user.PathToImg;
+            user.PathToImg = model.Img;
             if (model.Password != null)
             {
                 await _userManager.RemovePasswordAsync(user);
@@ -271,7 +271,6 @@ public class AuthorizeController : BasePublicController
                 await uploadedImg.CopyToAsync(fileStream);
             }
         }
-
         
         var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{guid}.{type}");
         return Ok(uri);
@@ -279,7 +278,7 @@ public class AuthorizeController : BasePublicController
     
     [HttpGet("getImgInProfile/{img}")]
     public async Task<IActionResult> GetImgInProfile([FromRoute] string img)
-    {
+    {   
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
         string path = $"{p}\\Dal\\wwwroot\\ImgInProfile\\" + img;
         var fileStream = new FileStream(path, FileMode.Open);
