@@ -20,4 +20,8 @@ public class UpdateUserModelRequest
     [DataType(DataType.Password)]
     [JsonProperty("Password")]
     public string? Password { get; init; }
+    
+    [DefaultValue(null)]
+    [JsonProperty("Img")]
+    public string? Img { get; init; }
 }
