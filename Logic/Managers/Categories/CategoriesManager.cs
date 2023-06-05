@@ -92,4 +92,10 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         var list = await _categoriesRepository.GetCategoryWithOperation(user.Id, from, to);
         return list;
     }
+
+    public async Task DeleteCategory(Guid id)
+    {
+        await DeleteAsync(id);
+        
+    }
 }

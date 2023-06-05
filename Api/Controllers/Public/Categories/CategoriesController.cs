@@ -122,7 +122,8 @@ public class CategoriesController : BasePublicController
         string path = $"{p}\\Dal\\wwwroot\\PictureForCategories\\" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
-        return File(fileStream, fileType, $"{img}");
+        return Ok(path);
+        //return File(fileStream, fileType, $"{img}");
     }
     
     

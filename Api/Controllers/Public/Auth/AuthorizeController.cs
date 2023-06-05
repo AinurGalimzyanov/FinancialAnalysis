@@ -251,13 +251,10 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
     
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("addImgInProfile")]
-    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg)
+    public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg, [FromQuery] string id)
     {
-        var token =  HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        if (CheckNotValidAccess(token)) return StatusCode(403);
-        var user = await FindUserByToken(token);
+        var user = await _userManager.FindByIdAsync(id);
         if (uploadedImg != null && user != null)
         {
             var type = uploadedImg.FileName.Split('.')[1];
@@ -276,13 +273,10 @@ public class AuthorizeController : BasePublicController
         return Ok(uri);
     }
     
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getImgInProfile")]
-    public async Task<IActionResult> GetImgInProfile()
+    public async Task<IActionResult> GetImgInProfile([FromQuery] string id)
     {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        if (CheckNotValidAccess(token)) return StatusCode(403);
-        var user = await FindUserByToken(token);
+        var user = await _userManager.FindByIdAsync(id);
         if (user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
@@ -290,19 +284,16 @@ public class AuthorizeController : BasePublicController
             var type = user.PathToImg.Split('.')[1];
             var fileType="application/octet-stream";
             var fileStream = new FileStream(path, FileMode.Open);
-            return File(fileStream, fileType, $"img.{type}");
+            return Ok(path);
         }
 
         return BadRequest();
     }
     
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpDelete("deleteImg")]
-    public async Task<IActionResult> DeleteImg()
+    public async Task<IActionResult> DeleteImg([FromQuery] string id)
     {
-        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
-        if (CheckNotValidAccess(token)) return StatusCode(403);
-        var user = await FindUserByToken(token);
+        var user = await _userManager.FindByIdAsync(id);
         if (user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
