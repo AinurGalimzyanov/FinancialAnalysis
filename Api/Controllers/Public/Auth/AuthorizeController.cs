@@ -269,7 +269,7 @@ public class AuthorizeController : BasePublicController
                 await uploadedImg.CopyToAsync(fileStream);
             }
 
-            user.PathToImg = path;
+            user.PathToImg = $"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{user.Id}.{type}";
             await _userManager.UpdateAsync(user);
         }
         var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{user.Id}.{type}");
