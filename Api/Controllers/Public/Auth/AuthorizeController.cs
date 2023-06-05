@@ -258,6 +258,7 @@ public class AuthorizeController : BasePublicController
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
         var user = await FindUserByToken(token);
+        var uri = new Uri("");
         if (uploadedImg != null && user != null)
         {
             var type = uploadedImg.FileName.Split('.')[1];
@@ -271,8 +272,8 @@ public class AuthorizeController : BasePublicController
 
             user.PathToImg = path;
             await _userManager.UpdateAsync(user);
+            uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile//ImgInProfile/{user.Id}.{type}");
         }
-        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile");
         return Ok(uri);
     }
     
