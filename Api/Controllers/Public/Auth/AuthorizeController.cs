@@ -295,7 +295,8 @@ public class AuthorizeController : BasePublicController
         if (user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-            string path = $"{p}\\Dal\\wwwroot" + user.PathToImg;
+            var pathToImg = user.PathToImg.Split("/").LastOrDefault();
+            string path = $"{p}\\Dal\\wwwroot\\ImgInProfile\\" + pathToImg;
             System.IO.File.Delete(path);
             user.PathToImg = null;
             await _userManager.UpdateAsync(user);
