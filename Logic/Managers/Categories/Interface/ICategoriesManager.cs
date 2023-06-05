@@ -1,5 +1,6 @@
 ﻿using Dal.Categories.Entity;
 using Dal.Operation.Entity;
+using Dal.User.Entity;
 using Logic.Managers.Base.Interface;
 
 namespace Logic.Managers.Categories.Interface;
@@ -14,4 +15,6 @@ public interface ICategoriesManager : IBaseManager<CategoriesDal, Guid>
 
      public Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperations(string token,
           DateTime from, DateTime to);
+
+     public Task AddStaticCategories(UserDal user);
 }

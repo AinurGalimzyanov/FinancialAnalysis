@@ -21,7 +21,7 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
     {
         var categories = await _context
             .Set<CategoriesDal>()
-            .Where(x => (x.UserDal.Id == userId || x.UserDal == null) && x.Type == type)
+            .Where(x => (x.UserDal.Id == userId) && x.Type == type)
             .ToListAsync();
         return categories;
     }
@@ -40,7 +40,7 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
     public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperation(string userId, DateTime from, DateTime to)
     {
         var c = await _context.Set<CategoriesDal>()
-            .Where(x => x.UserDal.Id == userId || x.UserDal == null)
+            .Where(x => x.UserDal.Id == userId)
             .Include(x => x.OperationList
                 .Where(y => from <= y.DateTime.Value && y.DateTime.Value >= to))
             .Select(x => new Tuple<CategoriesDal, List<OperationDal>>(x, x.OperationList))

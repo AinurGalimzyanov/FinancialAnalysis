@@ -136,6 +136,15 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
         var category = await _operationRepository.GetOperationCategory(operation.Id);
         var difference = 0;
         
+        /*if (category.Type == "income")
+        {
+            difference = (int)(operation.Price - oldPrice) < 0 ? 0 : (int)(operation.Price - oldPrice);
+        }
+
+        if (category.Type == "expenses")
+        {
+            difference = (int)(oldPrice - operation.Price) < 0 ? 0 : (int)(oldPrice - operation.Price);
+        }*/
         if (category.Type == "income")
         {
             difference = (int)(operation.Price - oldPrice);

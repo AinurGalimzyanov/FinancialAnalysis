@@ -1,14 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
-using System.Xml.Linq;
 using Api.Controllers.Public.Auth.Dto.Request;
 using Api.Controllers.Public.Auth.Dto.Response;
 using Api.Controllers.Public.Base;
 using AutoMapper;
 using Dal.User.Entity;
-using Logic.Managers.User.Interface;
+using Logic.Managers.Categories.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Context;
-using Extensions = Newtonsoft.Json.Linq.Extensions;
 
 namespace Api.Controllers.Public.Auth;
 
@@ -25,19 +22,22 @@ public class AuthorizeController : BasePublicController
 {
     private readonly SignInManager<UserDal> _signInManager;
     private readonly UserManager<UserDal> _userManager;
+    private readonly ICategoriesManager _categoriesManager;
     private readonly JWTSettings _options;
     private readonly IMapper _mapper;
 
     public AuthorizeController(UserManager<UserDal> userManager, 
         SignInManager<UserDal> signInManager, 
         IOptions<JWTSettings> options,
-        IMapper mapper)
+        IMapper mapper,
+        ICategoriesManager categoriesManager)
     {
         LogContext.PushProperty("Source", "Test Authorize Controller");
         _userManager = userManager;
         _signInManager = signInManager;
         _options = options.Value;
         _mapper = mapper;
+        _categoriesManager = categoriesManager;
     }
 
     [HttpPost("register")]
@@ -59,6 +59,7 @@ public class AuthorizeController : BasePublicController
             await _userManager.UpdateAsync(user);
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
             var link = "http://localhost:5216/api/v1/public/Authorize/signin/{user.Id}";
+            await _categoriesManager.AddStaticCategories(user);
             //EmailSender.SendEmail($"<a href=\"{link}\">{link}</a>", "vladimir.tereshin@urfu.me");
             return Ok(new RegistModelResponse("Bearer " + accessToken, user.Name, user.Email));
         }

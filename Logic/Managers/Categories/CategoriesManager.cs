@@ -34,6 +34,33 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         return user;
     }
     
+    public async Task AddStaticCategories(UserDal user)
+    {
+        var listStaticCategories = new List<CategoriesDal>()
+        {
+            new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user},
+            new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user},
+
+            new() { Id = Guid.NewGuid(), Name = "Аванс", Type = "income", UserDal = user },
+            new() { Id = Guid.NewGuid(), Name = "Зарплата", Type = "income", UserDal = user },
+            new() { Id = Guid.NewGuid(), Name = "Больничные", Type = "income", UserDal = user },
+            new() { Id = Guid.NewGuid(), Name = "Премния", Type = "income", UserDal = user }
+        };
+        foreach (var category in listStaticCategories)          
+        {
+            await Repository.InsertAsync(category); 
+        }
+    }
+    
     public async Task<int?> CreateCategories(string token, CategoriesDal dal)
     {
         var user = await FindUser(token);
