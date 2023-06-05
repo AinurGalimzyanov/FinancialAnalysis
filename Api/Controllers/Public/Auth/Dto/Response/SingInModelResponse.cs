@@ -9,7 +9,6 @@ public class SingInModelResponse
     [JsonProperty("AccessToken")] 
     public string AccessToken { get; init; }
     
-    
     [Required] 
     [JsonProperty("Name")] 
     public string Name { get; init; }
@@ -22,12 +21,17 @@ public class SingInModelResponse
     [Required]
     [JsonProperty("Balance")]
     public int? Balance { get; init; }
+    
+    [Required] 
+    [JsonProperty("Img")] 
+    public string? Img { get; init; }
 
-    public SingInModelResponse(string accessToken, string name, string email, int? balance)
+    public SingInModelResponse(string accessToken, string name, string email, int? balance, string? img)
     {
         AccessToken = accessToken;
         Name = name;
         Email = email;
         Balance = balance;
+        Img = img;
     }
 }

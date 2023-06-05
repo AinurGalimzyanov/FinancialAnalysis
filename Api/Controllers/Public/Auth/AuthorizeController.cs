@@ -137,7 +137,7 @@ public class AuthorizeController : BasePublicController
             { 
                 HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", user.RefreshToken);
             }
-            return Ok(new SingInModelResponse("Bearer " + accessToken, user.Name, user.Email, user.Balance));
+            return Ok(new SingInModelResponse("Bearer " + accessToken, user.Name, user.Email, user.Balance, user.PathToImg));
         }
 
         return Unauthorized();
@@ -153,7 +153,7 @@ public class AuthorizeController : BasePublicController
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var accessToken = GetToken(claims, 15);
-            return Ok(new SingInModelResponse("Bearer " +accessToken, user.Name, user.Email, user.Balance));
+            return Ok(new SingInModelResponse("Bearer " +accessToken, user.Name, user.Email, user.Balance, user.PathToImg));
         }
         
         return Unauthorized();
