@@ -281,10 +281,9 @@ public class AuthorizeController : BasePublicController
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
             string path = $"{p}\\Dal\\wwwroot" + user.PathToImg;
-            var type = user.PathToImg.Split('.')[1];
             var fileType="application/octet-stream";
             var fileStream = new FileStream(path, FileMode.Open);
-            return Ok(path);
+            return Ok(fileStream);
         }
 
         return BadRequest();
