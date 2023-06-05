@@ -251,10 +251,13 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("addImgInProfile")]
     public async Task<IActionResult> AddImgInProfile(IFormFile uploadedImg, [FromQuery] string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var user = await FindUserByToken(token);
         if (uploadedImg != null && user != null)
         {
             var type = uploadedImg.FileName.Split('.')[1];
@@ -273,10 +276,13 @@ public class AuthorizeController : BasePublicController
         return Ok(uri);
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getImgInProfile")]
     public async Task<IActionResult> GetImgInProfile([FromQuery] string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var user = await FindUserByToken(token);
         if (user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
@@ -289,10 +295,13 @@ public class AuthorizeController : BasePublicController
         return BadRequest();
     }
     
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpDelete("deleteImg")]
     public async Task<IActionResult> DeleteImg([FromQuery] string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var user = await FindUserByToken(token);
         if (user != null)
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
