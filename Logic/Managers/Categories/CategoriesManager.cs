@@ -45,9 +45,9 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
             new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/транспорт.png"},
             new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/образование.png"},
             new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/спорт.png"},
-            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/подарки.png"},
+            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/Подарки.png"},
             new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/здоровье.png"},
-            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/покупки.png"},
+            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/Покупки.png"},
             new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/жкх.png"},
             new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/связь.png"},
 
