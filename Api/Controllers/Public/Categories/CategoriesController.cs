@@ -77,16 +77,17 @@ public class CategoriesController : BasePublicController
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
-    //sdfsf
+    
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getAllCategoryFromTo")]
     public async Task<IActionResult> GetAllCategoryFromTo([FromQuery] DateTimeLimitRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
-        var categories = await _categoriesManager.GetAllAsync();
+        var categories = await _categoriesManager.GetAllCategoriesByType(token);
+        var result = model.Type == "income" ? categories.Item1 : categories.Item2;
         var responses= new List<CategoryResponse>();
-        foreach (var category in  categories)
+        foreach (var category in  result)
         {
             responses.Add(new CategoryResponse(category.Name, category.Id, category.Type,
                 await _categoriesManager.GetSumCategoryFromTo(token, category.Id, model.FromDateTime, model.ToDateTime,

@@ -74,7 +74,6 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         var listIncome = await _categoriesRepository.GetAllUserCategory(user.Id, "income");
         var listExpenses = await _categoriesRepository.GetAllUserCategory(user.Id, "expenses");
         
-        
         return new(listIncome, listExpenses);
     }
 
