@@ -37,16 +37,17 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
             .SumAsync();
     }
     
-    public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperation(string userId, DateTime from, DateTime to, string type)
+    public async Task<int?> GetSumCategoryFromTo(string userId, Guid catId, DateTime from, DateTime to, string type)
     {
-        var c = await _context.Set<CategoriesDal>()
-            .Where(x => x.UserDal.Id == userId && x.Type == type)
+        return  await _context.Set<CategoriesDal>()
+            .Where(x => x.Id == catId)
             .Include(x => x.OperationList
                 .Where(y => from <= y.DateTime.Value && y.DateTime.Value <= to))
-            .Select(x => new Tuple<CategoriesDal, List<OperationDal>>(x, x.OperationList))
-            .ToListAsync();
-
-        return c;
+            .SelectMany(x => x.OperationList)
+            .Where(x => x.UserDal.Id == userId)
+            .Select(x => x.Price)
+            .SumAsync();
+        
     }
 
     public async Task<List<OperationDal>> GetOperations(Guid id)
