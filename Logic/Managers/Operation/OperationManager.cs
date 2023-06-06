@@ -186,5 +186,10 @@ public class OperationManager : BaseManager<OperationDal, Guid>, IOperationManag
     {
         return await _operationRepository.GetNameCategoryAsync(operationId);
     }
-    
+
+    public async Task<List<OperationDal>> GetOperationsByTypeDynamically(string token, DateTime from, DateTime to, string type)
+    {
+        var user = await FindUser(token);
+        return await _operationRepository.GetOperationsByTypeDynamically(user.Id, from, to, type);
+    }
 }

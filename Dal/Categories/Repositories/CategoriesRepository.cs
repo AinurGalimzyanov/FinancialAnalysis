@@ -42,7 +42,7 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
         var c = await _context.Set<CategoriesDal>()
             .Where(x => x.UserDal.Id == userId && x.Type == type)
             .Include(x => x.OperationList
-                .Where(y => from <= y.DateTime.Value && y.DateTime.Value >= to))
+                .Where(y => from <= y.DateTime.Value && y.DateTime.Value <= to))
             .Select(x => new Tuple<CategoriesDal, List<OperationDal>>(x, x.OperationList))
             .ToListAsync();
 

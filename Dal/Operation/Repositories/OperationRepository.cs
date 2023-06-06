@@ -38,6 +38,14 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
             .ToListAsync();
         return operations;
     }
+    
+    public async Task<List<OperationDal>> GetOperationsByTypeDynamically(string userId, DateTime from, DateTime to, string type)
+    {
+        return await _context.Set<OperationDal>()
+            .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Type == type )
+            .Where(y => from <= y.DateTime.Value && y.DateTime.Value <= to)
+            .ToListAsync();
+    }
 
     public async Task<List<OperationDal>> GetAllOperationsAsync(string userId, DateTime date)
     {
@@ -74,7 +82,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
 
         return category;
     }
-
+    
     
 }
 

@@ -80,6 +80,24 @@ public class OperationController : BasePublicController
         return result != null ? Ok(new AllOperationResponse(result)) : BadRequest();
     }
     
+    [HttpGet("getOperationsByTypeDynamically")]
+    public async Task<IActionResult> GetOperationsByTypeDynamically([FromQuery] OperationsByTypeDynamically model)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        if (CheckNotValidAccess(token)) return StatusCode(403);
+        var operations =  await _operationManager.GetOperationsByTypeDynamically(token, model.DateTimeFrom, model.DateTimeTo, model.Type);
+        if (operations.Count - model.Count * model.Page < -model.Count) return BadRequest();
+        var result = new List<OperationResponse>();
+        var skipValue = model.Count == 0 ? 0 : operations.Count - model.Count * model.Page;
+        var takeValue = model.Count == 0 ? operations.Count : (skipValue > -model.Count && skipValue < 0) ? operations.Count - model.Count * (model.Page - 1) : model.Count;
+        foreach (var operation in operations.Skip(skipValue).Take(takeValue))
+        {
+            result.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime, 
+                await  _operationManager.GetNameCategory(operation.Id)));
+        }
+        return result != null ? Ok(new AllOperationResponse(result)) : BadRequest();
+    }
+    
     [HttpGet("getOperationByAllCategory")]
     public async Task<IActionResult> GetOperationByAllCategory([FromQuery] OperationsByCategoryModelRequest model)
     {

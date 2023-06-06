@@ -96,7 +96,7 @@ public class CategoriesController : BasePublicController
             {
                 resultOperations.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime));
             }
-            resultIncome.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), resultOperations, i.Item1.Img));
+            resultIncome.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id,  await _categoriesManager.GetSumCategory(i.Item1.Id, token), resultOperations, i.Item1.Img));
         }
         
         var categoriesExpenses = await _categoriesManager.GetCategoryWithOperations(token, model.FromDateTime, model.ToDateTime, "expenses");

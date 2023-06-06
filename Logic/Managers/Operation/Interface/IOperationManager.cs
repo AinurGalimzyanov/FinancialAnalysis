@@ -30,5 +30,6 @@ public interface IOperationManager : IBaseManager<OperationDal, Guid>
 
     public Task<string> GetNameCategory(Guid operationId);
 
-
+    public  Task<List<OperationDal>> GetOperationsByTypeDynamically(string token, DateTime from, DateTime to,
+        string type);
 }
