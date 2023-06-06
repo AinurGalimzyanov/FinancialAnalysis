@@ -37,22 +37,21 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
     
     public async Task AddStaticCategories(UserDal user)
     {
-        var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
         var listStaticCategories = new List<CategoriesDal>()
         {
-            new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\1.png"},
-            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\2.png"},
-            new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\3.png"},
-            new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\4.png"},
-            new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\5.png"},
-            new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\6.png"},
-            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\7.png"},
-            new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\8.png"},
-            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\9.png"},
-            new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\10.png"},
-            new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\11.png"},
+            new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user, Img = "http://localhost:5216/api/v1/public/Categories/getPictureForCategories/1.png"},
+            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/2.png"},
+            new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/3.png"},
+            new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/4.png"},
+            new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/5.png"},
+            new() { Id = Guid.NewGuid(), Name = "Спорт", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/6.png"},
+            new() { Id = Guid.NewGuid(), Name = "Подарки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/7.png"},
+            new() { Id = Guid.NewGuid(), Name = "Здоровье", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/8.png"},
+            new() { Id = Guid.NewGuid(), Name = "Покупки", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/9.png"},
+            new() { Id = Guid.NewGuid(), Name = "ЖКХ", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/10.png"},
+            new() { Id = Guid.NewGuid(), Name = "Связь", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/11.png"},
 
-            new() { Id = Guid.NewGuid(), Name = "Зарплата", Type = "income", UserDal = user, Img = $"{p}\\Dal\\wwwroot\\PictureForCategories\\Group(13).png" }
+            new() { Id = Guid.NewGuid(), Name = "Зарплата", Type = "income", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/Group(13).png" }
         };
         foreach (var category in listStaticCategories)          
         {
