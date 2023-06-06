@@ -40,7 +40,7 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         var listStaticCategories = new List<CategoriesDal>()
         {
             new() { Id = Guid.NewGuid(), Name = "Продукты", Type = "expenses", UserDal = user, Img = "http://localhost:5216/api/v1/public/Categories/getPictureForCategories/продукты.png"},
-            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/развлечение.png"},
+            new() { Id = Guid.NewGuid(), Name = "Развлечение", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/развлечения.png"},
             new() { Id = Guid.NewGuid(), Name = "Еда вне дома", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/еда вне дома.png"},
             new() { Id = Guid.NewGuid(), Name = "Транспорт", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/транспорт.png"},
             new() { Id = Guid.NewGuid(), Name = "Образование", Type = "expenses", UserDal = user, Img = $"http://localhost:5216/api/v1/public/Categories/getPictureForCategories/образование.png"},
