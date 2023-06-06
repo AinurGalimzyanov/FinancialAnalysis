@@ -77,7 +77,7 @@ public class CategoriesController : BasePublicController
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
-    
+    //sdfsf
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getAllCategoryFromTo")]
     public async Task<IActionResult> GetAllCategoryFromTo([FromQuery] DateTimeLimitRequest model)
