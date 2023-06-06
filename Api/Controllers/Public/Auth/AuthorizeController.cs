@@ -54,7 +54,7 @@ public class AuthorizeController : BasePublicController
             };
             await _userManager.AddClaimsAsync(user, claims);
             var accessToken = GetToken(claims, 15);
-            var refreshToken = GetToken(claims, 43200);
+            var refreshToken = GetToken(claims, 10080);
             user.RefreshToken = refreshToken;
             await _userManager.UpdateAsync(user);
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
@@ -188,7 +188,7 @@ public class AuthorizeController : BasePublicController
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var newAccessToken = GetToken(claims, 15);
-            var newRefreshToken = GetToken(claims, 43200);
+            var newRefreshToken = GetToken(claims, 10080);
             user.RefreshToken = newRefreshToken;
             await _userManager.UpdateAsync(user);
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
@@ -240,7 +240,7 @@ public class AuthorizeController : BasePublicController
                 await _userManager.AddClaimsAsync(user, newClaims);
                 
                 var newAccessToken = GetToken(newClaims, 15);
-                var newRefreshToken = GetToken(newClaims, 43200);
+                var newRefreshToken = GetToken(newClaims, 10080);
                 HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
                 user.RefreshToken = newRefreshToken;
                 await _userManager.UpdateAsync(user);
