@@ -14,7 +14,7 @@ public interface ICategoriesManager : IBaseManager<CategoriesDal, Guid>
      public Task<int?> GetSumCategory(Guid categoryId, string token);
 
      public Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperations(string token,
-          DateTime from, DateTime to);
+          DateTime from, DateTime to, string type);
 
      public Task AddStaticCategories(UserDal user);
 

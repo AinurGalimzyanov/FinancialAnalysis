@@ -86,10 +86,10 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         return sum;
     }
 
-    public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperations(string token, DateTime from, DateTime to)
+    public async Task<List<Tuple<CategoriesDal, List<OperationDal>>>> GetCategoryWithOperations(string token, DateTime from, DateTime to, string type)
     {
         var user = await FindUser(token);
-        var list = await _categoriesRepository.GetCategoryWithOperation(user.Id, from, to);
+        var list = await _categoriesRepository.GetCategoryWithOperation(user.Id, from, to, type);
         return list;
     }
 

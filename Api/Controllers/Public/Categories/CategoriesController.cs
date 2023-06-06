@@ -84,18 +84,37 @@ public class CategoriesController : BasePublicController
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
-        var categories = await _categoriesManager.GetCategoryWithOperations(token, model.FromDateTime, model.ToDateTime);
-        var result = new List<CategoryResponse>();
-        foreach (var i in categories)
+        var categoriesIncome = await _categoriesManager.GetCategoryWithOperations(token, model.FromDateTime, model.ToDateTime, "income");
+        var resultIncome = new List<CategoryResponse>();
+        foreach (var i in categoriesIncome)
         {
-            var o = new List<OperationResponse>();
-            foreach (var j in i.Item2)
+            var operations = i.Item2;
+            var resultOperations = new List<OperationResponse>();
+            var skipValue = model.Count == 0 ? 0 : operations.Count - model.Count * model.Page;
+            var takeValue = model.Count == 0 ? operations.Count : (skipValue > -model.Count && skipValue < 0) ? operations.Count - model.Count * (model.Page - 1) : model.Count;
+            foreach (var operation in operations.Skip(skipValue).Take(takeValue))
             {
-                o.Add(new OperationResponse(j.Id, j.Price, j.DateTime));
+                resultOperations.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime));
             }
-            result.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), o, i.Item1.Img));
+            resultIncome.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), resultOperations, i.Item1.Img));
         }
-        return Ok(new AllCategoryWithOperation(result));
+        
+        var categoriesExpenses = await _categoriesManager.GetCategoryWithOperations(token, model.FromDateTime, model.ToDateTime, "income");
+        var resultExpenses = new List<CategoryResponse>();
+        foreach (var i in categoriesExpenses)
+        {
+            var operations = i.Item2;
+            var resultOperations = new List<OperationResponse>();
+            var skipValue = model.Count == 0 ? 0 : operations.Count - model.Count * model.Page;
+            var takeValue = model.Count == 0 ? operations.Count : (skipValue > -model.Count && skipValue < 0) ? operations.Count - model.Count * (model.Page - 1) : model.Count;
+            foreach (var operation in operations.Skip(skipValue).Take(takeValue))
+            {
+                resultOperations.Add(new OperationResponse(operation.Id, operation.Price, operation.DateTime));
+            }
+            resultExpenses.Add(new CategoryResponse(i.Item1.Name, i.Item1.Id, await _categoriesManager.GetSumCategory(i.Item1.Id, token), resultOperations, i.Item1.Img));
+        }
+        
+        return Ok(new AllCategoryWithOperation(resultIncome, resultExpenses));
     }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

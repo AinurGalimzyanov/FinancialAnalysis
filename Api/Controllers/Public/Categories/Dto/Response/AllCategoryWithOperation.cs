@@ -6,11 +6,16 @@ namespace Api.Controllers.Public.Categories.Dto.Response;
 public class AllCategoryWithOperation
 {
     [Required] 
-    [JsonProperty("ListCategory")] 
-    public List<CategoryResponse> ListCategory { get; init; }
-
-    public AllCategoryWithOperation(List<CategoryResponse> listCategory)
+    [JsonProperty("ListCategoryIncome")] 
+    public List<CategoryResponse> ListCategoryIncome { get; init; }
+    
+    [Required] 
+    [JsonProperty("ListCategoryExpenses")] 
+    public List<CategoryResponse> ListCategoryExpenses { get; init; }
+    
+    public AllCategoryWithOperation(List<CategoryResponse> listCategoryIncome, List<CategoryResponse> listCategoryExpenses)
     {
-        ListCategory = listCategory;
+        ListCategoryIncome = listCategoryIncome;
+        ListCategoryExpenses = listCategoryExpenses;
     }
 }
