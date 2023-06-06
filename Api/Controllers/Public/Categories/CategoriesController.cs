@@ -79,8 +79,8 @@ public class CategoriesController : BasePublicController
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("getAllCategoryWithOperation")]
-    public async Task<IActionResult> GetAllCategoryWithOperation([FromQuery] DateTimeLimitRequest model)
+    [HttpGet("getAllCategoryFromTo")]
+    public async Task<IActionResult> GetAllCategoryFromTo([FromQuery] DateTimeLimitRequest model)
     {
         var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         if (CheckNotValidAccess(token)) return StatusCode(403);
