@@ -41,10 +41,9 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
     {
         return  await _context.Set<CategoriesDal>()
             .Where(x => x.Id == catId)
-            .Include(x => x.OperationList
-                .Where(y => from <= y.DateTime.Value && y.DateTime.Value <= to))
+            .Include(x => x.OperationList)
             .SelectMany(x => x.OperationList)
-            .Where(x => x.UserDal.Id == userId)
+            .Where(x => x.UserDal.Id == userId && from <= x.DateTime.Value && x.DateTime.Value <= to)
             .Select(x => x.Price)
             .SumAsync();
         
