@@ -184,7 +184,7 @@ public class AuthorizeController : BasePublicController
     {
         var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
         var user = await FindUserByToken(refreshToken);
-        if(user != null || user.RefreshToken == refreshToken)
+        if(user != null && user.RefreshToken == refreshToken)
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var newAccessToken = GetToken(claims, 15);
