@@ -57,7 +57,7 @@ public class AuthorizeController : BasePublicController
             var refreshToken = GetToken(claims, 10080);
             user.RefreshToken = refreshToken;
             await _userManager.UpdateAsync(user);
-            HttpContext.Response.Cookies.Append("RefreshToken", refreshToken);
+            HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", refreshToken);
             var link = "http://localhost:5216/api/v1/public/Authorize/signin/{user.Id}";
             await _categoriesManager.AddStaticCategories(user);
             //EmailSender.SendEmail($"<a href=\"{link}\">{link}</a>", "vladimir.tereshin@urfu.me");
@@ -132,10 +132,10 @@ public class AuthorizeController : BasePublicController
         {
             var claims = await _userManager.GetClaimsAsync(user);
             var accessToken = GetToken(claims, 15);
-            var refreshToken = HttpContext.Request.Cookies["RefreshToken"];
+            var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
             if (refreshToken == null)
             { 
-                HttpContext.Response.Cookies.Append("RefreshToken", user.RefreshToken);
+                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", user.RefreshToken);
             }
             return Ok(new SingInModelResponse("Bearer " + accessToken, user.Name, user.Email, user.Balance, user.PathToImg));
         }
@@ -162,7 +162,7 @@ public class AuthorizeController : BasePublicController
     [HttpPost("signout")]
     public async Task<IActionResult> SignOut()
     {
-        HttpContext.Response.Cookies.Delete("RefreshToken");
+        HttpContext.Response.Cookies.Delete(".AspNetCore.Application.RefreshToken");
         HttpContext.Response.Headers.Remove("Authorization");
         await _signInManager.SignOutAsync();
         return Ok();
@@ -182,7 +182,7 @@ public class AuthorizeController : BasePublicController
     [HttpPatch("refreshAccessToken")]
     public async Task<IActionResult> RefreshToken()
     {
-        var refreshToken = HttpContext.Request.Cookies["RefreshToken"];
+        var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
         var user = await FindUserByToken(refreshToken);
         if(user != null && user.RefreshToken == refreshToken)
         {
@@ -191,10 +191,10 @@ public class AuthorizeController : BasePublicController
             var newRefreshToken = GetToken(claims, 10080);
             user.RefreshToken = newRefreshToken;
             await _userManager.UpdateAsync(user);
-            HttpContext.Response.Cookies.Append("RefreshToken", newRefreshToken);
+            HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
             return Ok(new RefreshModelResponse("Bearer " + newAccessToken));
         }
-        //.AspNetCore.Application.RefreshToken
+        
         return BadRequest();
     }
 
@@ -240,7 +240,7 @@ public class AuthorizeController : BasePublicController
                 
                 var newAccessToken = GetToken(newClaims, 15);
                 var newRefreshToken = GetToken(newClaims, 10080);
-                HttpContext.Response.Cookies.Append("RefreshToken", newRefreshToken);
+                HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
                 user.RefreshToken = newRefreshToken;
                 await _userManager.UpdateAsync(user);
                 
