@@ -162,9 +162,9 @@ public class AuthorizeController : BasePublicController
     [HttpPost("signout")]
     public async Task<IActionResult> SignOut()
     {
-        await _signInManager.SignOutAsync();
         HttpContext.Response.Cookies.Delete(".AspNetCore.Application.RefreshToken");
         HttpContext.Response.Headers.Remove("Authorization");
+        await _signInManager.SignOutAsync();
         return Ok();
     }
     
@@ -194,7 +194,6 @@ public class AuthorizeController : BasePublicController
             HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
             return Ok(new RefreshModelResponse("Bearer " + newAccessToken));
         }
-
         
         return BadRequest();
     }
