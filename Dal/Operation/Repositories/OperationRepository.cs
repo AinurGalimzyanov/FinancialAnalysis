@@ -44,7 +44,7 @@ public class OperationRepository : BaseRepository<OperationDal, Guid>, IOperatio
         return await _context.Set<OperationDal>()
             .Where(x => x.UserDal.Id == userId && x.CategoriesDal.Type == type )
             .Where(y => from <= y.DateTime.Value && y.DateTime.Value <= to)
-            .OrderBy(x => x.DateTime.Value)
+            .OrderByDescending(x => x.DateTime.Value)
             .ToListAsync();
     }
 
