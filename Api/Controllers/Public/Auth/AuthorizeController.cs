@@ -176,7 +176,7 @@ public class AuthorizeController : BasePublicController
         var newPassword = Guid.NewGuid().ToString();
         await _userManager.RemovePasswordAsync(user);
         await _userManager.AddPasswordAsync(user, newPassword);
-        EmailSender.SendEmail($"Новый пароль : {newPassword}", "aricsybsn@gmail.com");
+        EmailSender.SendEmail($"Новый пароль : {newPassword}", $"{model.Email}");
         return Ok();
     }
 
