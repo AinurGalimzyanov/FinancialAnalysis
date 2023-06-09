@@ -127,7 +127,7 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> GetPicturesForCategories()
     {
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-        string path = $"{p}/Dal/wwwroot/PictureForCategories";
+        string path = $"{p}/Dal/File/PictureForCategories";
         var responses = Directory
             .GetFiles(path)
             .Select(x => new PictureModelResponse(new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))
