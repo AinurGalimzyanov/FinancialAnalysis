@@ -265,14 +265,14 @@ public class AuthorizeController : BasePublicController
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
             string path = $"/ImgInProfile/{guid}.{type}";
-            using (var fileStream = new FileStream($"{p}\\Dal\\wwwroot"
+            using (var fileStream = new FileStream($"{p}/Dal/wwwroot"
                 + path, FileMode.Create))
             {
                 await uploadedImg.CopyToAsync(fileStream);
             }
         }
         
-        var uri = new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Authorize/getImgInProfile/{guid}.{type}");
+        var uri = new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Authorize/getImgInProfile/{guid}.{type}");
         return Ok(uri);
     }
     
@@ -280,7 +280,7 @@ public class AuthorizeController : BasePublicController
     public async Task<IActionResult> GetImgInProfile([FromRoute] string img)
     {   
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-        string path = $"{p}\\Dal\\wwwroot\\ImgInProfile\\" + img;
+        string path = $"{p}/Dal/wwwroot/ImgInProfile/" + img;
         var fileStream = new FileStream(path, FileMode.Open);
         return Ok(fileStream);
     }
@@ -296,7 +296,7 @@ public class AuthorizeController : BasePublicController
         {
             var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
             var pathToImg = user.PathToImg.Split("/").LastOrDefault();
-            string path = $"{p}\\Dal\\wwwroot\\ImgInProfile\\" + pathToImg;
+            string path = $"{p}/Dal/wwwroot/ImgInProfile/" + pathToImg;
             System.IO.File.Delete(path);
             user.PathToImg = null;
             await _userManager.UpdateAsync(user);

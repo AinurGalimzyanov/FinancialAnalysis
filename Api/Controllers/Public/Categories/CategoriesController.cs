@@ -117,7 +117,7 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
     {
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-        string path = $"{p}\\Dal\\wwwroot\\PictureForCategories\\" + img;
+        string path = $"{p}/Dal/wwwroot/PictureForCategories/" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
         return Ok(fileStream);
@@ -127,10 +127,10 @@ public class CategoriesController : BasePublicController
     public async Task<IActionResult> GetPicturesForCategories()
     {
         var p = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
-        string path = $"{p}\\Dal\\wwwroot\\PictureForCategories";
+        string path = $"{p}/Dal/wwwroot/PictureForCategories";
         var responses = Directory
             .GetFiles(path)
-            .Select(x => new PictureModelResponse(new Uri($"{Request.Scheme}://{Request.Host}/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))
+            .Select(x => new PictureModelResponse(new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))
             .ToList();
         return Ok(new PicturesModelResponse(responses));
     }
