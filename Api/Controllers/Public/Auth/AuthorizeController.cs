@@ -131,7 +131,7 @@ public class AuthorizeController : BasePublicController
         if (result.Succeeded ) //&& user.CheckExistenceMail
         {
             var claims = await _userManager.GetClaimsAsync(user);
-            var accessToken = GetToken(claims, 1500000000);
+            var accessToken = GetToken(claims, 10080);
             var refreshToken = HttpContext.Request.Cookies[".AspNetCore.Application.RefreshToken"];
             if (refreshToken == null)
             { 
@@ -153,7 +153,7 @@ public class AuthorizeController : BasePublicController
         if (user != null ) //&& user.CheckExistenceMail
         {
             var claims = await _userManager.GetClaimsAsync(user);
-            var accessToken = GetToken(claims, 1500000000);
+            var accessToken = GetToken(claims, 10080);
             return Ok(new SingInModelResponse("Bearer " +accessToken, user.Name, user.Email, user.Balance, user.PathToImg));
         }
         
@@ -188,7 +188,7 @@ public class AuthorizeController : BasePublicController
         if(user != null && user.RefreshToken == refreshToken)
         {
             var claims = await _userManager.GetClaimsAsync(user);
-            var newAccessToken = GetToken(claims, 1500000000);
+            var newAccessToken = GetToken(claims, 10080);
             var newRefreshToken = GetToken(claims, 10080);
             user.RefreshToken = newRefreshToken;
             await _userManager.UpdateAsync(user);
@@ -239,7 +239,7 @@ public class AuthorizeController : BasePublicController
                 };
                 await _userManager.AddClaimsAsync(user, newClaims);
                 
-                var newAccessToken = GetToken(newClaims, 1500000000);
+                var newAccessToken = GetToken(newClaims, 10080);
                 var newRefreshToken = GetToken(newClaims, 10080);
                 HttpContext.Response.Cookies.Append(".AspNetCore.Application.RefreshToken", newRefreshToken);
                 user.RefreshToken = newRefreshToken;
