@@ -26,6 +26,19 @@ public class CategoriesRepository : BaseRepository<CategoriesDal, Guid>, ICatego
         return categories;
     }
 
+    public async Task<int?> GetSumCurrentMonth(Guid catId, string userId, DateTime date)
+    {
+        return  await _context.Set<CategoriesDal>()
+            .Where(x => x.Id == catId)
+            .Include(x => x.OperationList)
+            .SelectMany(x => x.OperationList)
+            .Where(x => x.UserDal.Id == userId)
+            .Where(x => x.DateTime.Value.Year == date.Year &&
+                        x.DateTime.Value.Month == date.Month)
+            .Select(x => x.Price)
+            .SumAsync();
+    }
+    
     public async Task<int?> GetSumCategory(Guid catId, string userId)
     {
         return  await _context.Set<CategoriesDal>()

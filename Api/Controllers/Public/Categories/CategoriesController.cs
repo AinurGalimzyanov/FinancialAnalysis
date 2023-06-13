@@ -45,8 +45,9 @@ public class CategoriesController : BasePublicController
     [HttpPut("update")]
     public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryModelRequest model)
     {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
         var newCategory = _mapper.Map<CategoriesDal>(model);
-        await _categoriesManager.UpdateAsync(newCategory);
+        await _categoriesManager.UpdateCategory(newCategory, token);
         return Ok();
     }
     
@@ -54,7 +55,8 @@ public class CategoriesController : BasePublicController
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
     { 
-        await _categoriesManager.DeleteCategory(id);
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Split(' ')[1];
+        await _categoriesManager.DeleteCategory(id, token);
         return Ok();
     }
 
@@ -69,11 +71,11 @@ public class CategoriesController : BasePublicController
         var responsesExpenses = new List<CategoryResponse>();
         foreach (var dal in categories.Item1)
         {
-            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token), dal.Img));
+            responsesIncome.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCurrentMonth(dal.Id, token, DateTime.Now), dal.Img));
         }
         foreach (var dal in categories.Item2)
         {
-            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCategory(dal.Id, token), dal.Img));
+            responsesExpenses.Add(new CategoryResponse(dal.Name, dal.Id, dal.Type, await _categoriesManager.GetSumCurrentMonth(dal.Id, token, DateTime.Now), dal.Img));
         }
         return Ok(new AllCategoryByTypeResponse(responsesIncome, responsesExpenses));
     }
@@ -116,7 +118,7 @@ public class CategoriesController : BasePublicController
     [HttpGet("getPictureForCategories/{img}")]
     public async Task<IActionResult> GetPictureForCategories([FromRoute] string img)
     {
-        string path = "wwwroot/PictureForCategories/" + img;
+        string path = "wwwroot/_content/Dal/PictureForCategories/" + img;
         var fileType="application/octet-stream";
         var fileStream = new FileStream(path, FileMode.Open);
         return Ok(fileStream);
@@ -125,7 +127,7 @@ public class CategoriesController : BasePublicController
     [HttpGet("getUriPicturesForCategories")]
     public async Task<IActionResult> GetPicturesForCategories()
     {
-        string path = "wwwroot/PictureForCategories";
+        string path = "wwwroot/_content/Dal/PictureForCategories";
         var responses = Directory
             .GetFiles(path)
             .Select(x => new PictureModelResponse(new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))

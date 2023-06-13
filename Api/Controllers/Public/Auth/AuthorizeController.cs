@@ -53,7 +53,7 @@ public class AuthorizeController : BasePublicController
                 new(ClaimTypes.Name, user.Name)
             };
             await _userManager.AddClaimsAsync(user, claims);
-            var accessToken = GetToken(claims, 1500000000);
+            var accessToken = GetToken(claims, 10080);
             var refreshToken = GetToken(claims, 10080);
             user.RefreshToken = refreshToken;
             await _userManager.UpdateAsync(user);
@@ -127,7 +127,6 @@ public class AuthorizeController : BasePublicController
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
         var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, false, false);
-        
         if (result.Succeeded ) //&& user.CheckExistenceMail
         {
             var claims = await _userManager.GetClaimsAsync(user);
@@ -278,7 +277,7 @@ public class AuthorizeController : BasePublicController
     [HttpGet("getImgInProfile/{img}")]
     public async Task<IActionResult> GetImgInProfile([FromRoute] string img)
     {   
-        string path = "wwwroot/ImgInProfile/" + img;
+        string path = "wwwroot/_content/Dal/ImgInProfile/" + img;
         var fileStream = new FileStream(path, FileMode.Open);
         return Ok(fileStream);
     }
@@ -293,7 +292,7 @@ public class AuthorizeController : BasePublicController
         if (user != null)
         {
             var pathToImg = user.PathToImg.Split("/").LastOrDefault();
-            string path = "wwwroot/ImgInProfile/" + pathToImg;
+            string path = "wwwroot/_content/Dal/ImgInProfile/" + pathToImg;
             System.IO.File.Delete(path);
             user.PathToImg = null;
             await _userManager.UpdateAsync(user);

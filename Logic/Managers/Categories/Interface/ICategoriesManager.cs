@@ -17,5 +17,9 @@ public interface ICategoriesManager : IBaseManager<CategoriesDal, Guid>
 
      public Task AddStaticCategories(UserDal user);
 
-     public Task DeleteCategory(Guid id);
+     public Task DeleteCategory(Guid id, string token);
+
+     public Task UpdateCategory(CategoriesDal dal, string token);
+
+     public Task<int?> GetSumCurrentMonth(Guid categoryId, string token, DateTime date);
 }
