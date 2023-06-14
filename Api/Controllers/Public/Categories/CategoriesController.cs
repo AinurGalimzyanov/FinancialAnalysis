@@ -130,7 +130,7 @@ public class CategoriesController : BasePublicController
         string path = "wwwroot/_content/Dal/PictureForCategories";
         var responses = Directory
             .GetFiles(path)
-            .Select(x => new PictureModelResponse(new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Categories/getPictureForCategories/{x.Split("\\").LastOrDefault()}")))
+            .Select(x => new PictureModelResponse(new Uri($"https://smartbudget.stk8s.66bit.ru/api/v1/public/Categories/getPictureForCategories/{x.Split("/").LastOrDefault()}")))
             .ToList();
         return Ok(new PicturesModelResponse(responses));
     }

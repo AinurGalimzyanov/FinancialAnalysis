@@ -263,7 +263,7 @@ public class AuthorizeController : BasePublicController
         if (uploadedImg != null && user != null)
         {
             string path = $"/ImgInProfile/{guid}.{type}";
-            using (var fileStream = new FileStream("wwwroot"
+            using (var fileStream = new FileStream("wwwroot/_content/Dal"
                 + path, FileMode.Create))
             {
                 await uploadedImg.CopyToAsync(fileStream);

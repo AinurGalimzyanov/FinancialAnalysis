@@ -63,16 +63,12 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
 
     public async Task UpdateCategory(CategoriesDal dal, string token)
     {
-        var sumTask =  GetSumCategory(dal.Id, token);
-        var userTask =  FindUser(token);
-        var sum = await sumTask;
-        var user = await userTask;
+        var sum = await GetSumCategory(dal.Id, token);
+        var user = await FindUser(token);
         var balance = dal.Type == "income" ? sum : -sum;
         user.Balance += balance;
-        var updateUser = _userManager.UpdateAsync(user);
-        var updateCategory = _categoriesRepository.UpdateAsync(dal);
-        await updateUser;
-        await updateCategory;
+        await _userManager.UpdateAsync(user);
+        await UpdateAsync(dal);
     }
 
     public async Task<int?> GetSumCurrentMonth(Guid categoryId, string token, DateTime date)
