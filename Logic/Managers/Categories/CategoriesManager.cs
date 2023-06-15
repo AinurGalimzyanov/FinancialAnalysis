@@ -65,9 +65,10 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
     {
         var sum = await GetSumCategory(dal.Id, token);
         var user = await FindUser(token);
-        var balance = dal.Type == "income" ? sum : -sum;
+        var balance = dal.Type == "income" ? 2 * sum : 2 * (-sum);
         user.Balance += balance;
-        await _userManager.UpdateAsync(user);
+        if(user.Balance >= 0)
+            await _userManager.UpdateAsync(user);
         await UpdateAsync(dal);
     }
 
