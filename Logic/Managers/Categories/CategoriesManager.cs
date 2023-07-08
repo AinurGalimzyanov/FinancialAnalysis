@@ -67,9 +67,11 @@ public class CategoriesManager : BaseManager<CategoriesDal, Guid>, ICategoriesMa
         var user = await FindUser(token);
         var balance = dal.Type == "income" ? 2 * sum : 2 * (-sum);
         user.Balance += balance;
-        if(user.Balance >= 0)
+        if (user.Balance >= 0)
+        {
             await _userManager.UpdateAsync(user);
-        await UpdateAsync(dal);
+            await UpdateAsync(dal);
+        }
     }
 
     public async Task<int?> GetSumCurrentMonth(Guid categoryId, string token, DateTime date)
